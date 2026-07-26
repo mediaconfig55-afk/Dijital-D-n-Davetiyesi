@@ -1,9 +1,9 @@
 {
-  "brideName": "Merve",
-  "groomName": "Erçin",
+  "brideName": "Esma",
+  "groomName": "Murat",
   "coupleInitials": "M & E",
-  "weddingDate": "2026-09-19T19:00:00",
-  "displayDate": "19 Eylül 2026, Cumartesi",
+  "weddingDate": "2026-08-20T19:00:00",
+  "displayDate": "20 Ağustos 2026, Cumartesi",
   "displayTime": "19:00",
   "slogan": "Bu güzel günümüzde sizleri de aramızda görmekten mutluluk duyarız!",
   "invitationText": "Düğünümüze hoş geldiniz! Mutluluğumuza ortak olmanız bizleri onurlandıracaktır.",
@@ -17,17 +17,17 @@
   "schedule": [
     {
       "time": "19:00",
-      "title": "Karşılama & Kokteyl",
+      "title": "Salon Kapı Açılış",
       "description": "Misafirlerimizin karşılanması ve canlı müzik eşliğinde açılış kokteyli."
     },
     {
-      "time": "20:00",
-      "title": "Nikah Töreni",
+      "time": "20:30",
+      "title": "Düğün Başlangıç",
       "description": "Büyük buluşma ve hayatlarımızı birleştirdiğimiz o özel an."
     },
     {
-      "time": "20:45",
-      "title": "Düğün Yemeği",
+      "time": "21:30",
+      "title": "Pasta Kesimi",
       "description": "Zarif lezzetler ve sevdiklerimizle birlikte akşam yemeği."
     },
     {

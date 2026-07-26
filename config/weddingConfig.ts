@@ -1,4 +1,4 @@
-export interface StoryTimelineItem {
+﻿export interface StoryTimelineItem {
   id: string;
   icon: string;
   title: string;
@@ -52,11 +52,11 @@ export interface WeddingConfig {
 }
 
 export const weddingConfig: WeddingConfig = {
-  brideName: "Merve",
-  groomName: "Erçin",
+  brideName: "Esma",
+  groomName: "Murat",
   coupleInitials: "M & E",
-  weddingDate: "2026-09-19T19:00:00",
-  displayDate: "19 Eylül 2026, Cumartesi",
+  weddingDate: "2026-08-20T19:00:00",
+  displayDate: "20 Ağustos 2026, Cumartesi",
   displayTime: "19:00",
   slogan: "Bu güzel günümüzde sizleri de aramızda görmekten mutluluk duyarız!",
   invitationText: "Düğünümüze hoş geldiniz! Mutluluğumuza ortak olmanız bizleri onurlandıracaktır.",
@@ -67,13 +67,13 @@ export const weddingConfig: WeddingConfig = {
     googleMapsUrl: "https://maps.google.com/?q=Gunes+Dugun+Salonu+Samsun",
     appleMapsUrl: "https://maps.apple.com/?q=Gunes+Dugun+Salonu+Samsun",
   },
-  schedule: [{"time":"19:00","title":"Karşılama \u0026 Kokteyl","description":"Misafirlerimizin karşılanması ve canlı müzik eşliğinde açılış kokteyli."},{"time":"20:00","title":"Nikah Töreni","description":"Büyük buluşma ve hayatlarımızı birleştirdiğimiz o özel an."},{"time":"20:45","title":"Düğün Yemeği","description":"Zarif lezzetler ve sevdiklerimizle birlikte akşam yemeği."},{"time":"22:00 - 01:00","title":"Eğlence \u0026 After Party","description":"Gece boyunca sürecek coşkulu kutlama ve unutulmaz anlar."}],
+  schedule: [{"time":"19:00","title":"Salon Kapı Açılış","description":"Misafirlerimizin karşılanması ve canlı müzik eşliğinde açılış kokteyli."},{"time":"20:30","title":"Düğün Başlangıç","description":"Büyük buluşma ve hayatlarımızı birleştirdiğimiz o özel an."},{"time":"21:30","title":"Pasta Kesimi","description":"Zarif lezzetler ve sevdiklerimizle birlikte akşam yemeği."},{"time":"22:00 - 01:00","title":"Eğlence \u0026 After Party","description":"Gece boyunca sürecek coşkulu kutlama ve unutulmaz anlar."}],
   storyTimeline: [{"id":"1","icon":"❤️","title":"Tanıştık","date":"2022","description":"Hayatımızı değiştiren ilk karşılaşma."},{"id":"2","icon":"☕","title":"İlk Kahve","date":"2023","description":"Saatlerce süren tatlı sohbetler ve unutulmaz bir buluşma."},{"id":"3","icon":"💍","title":"Evlilik Teklifi","date":"2025","description":"Yıldızların altında sonsuzluğa \u0027Evet\u0027 dediğimiz an."},{"id":"4","icon":"👰","title":"Düğün Günü","date":"19 Eylül 2026","description":"Tüm sevdiklerimizle bir araya geldiğimiz en mutlu günümüz."}],
   galleryPhotos: [
     {
       id: "g1",
       url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80",
-      caption: "Büyülü bir akşamdan",
+      caption: "Enchanting evening",
       aspectRatio: "portrait",
     },
     {
@@ -85,7 +85,7 @@ export const weddingConfig: WeddingConfig = {
     {
       id: "g3",
       url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=80",
-      caption: "Aşkla bakışlar",
+      caption: "Love in every glance",
       aspectRatio: "portrait",
     },
   ],

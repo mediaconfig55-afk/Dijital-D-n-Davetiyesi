@@ -1,0 +1,30 @@
+{
+  "brideName": "Zeynep",
+  "groomName": "Burak",
+  "coupleInitials": "B & Z",
+  "weddingDate": "2026-10-10T19:00:00",
+  "displayDate": "10 Ekim 2026, Cumartesi",
+  "displayTime": "19:00",
+  "slogan": "Sevginin ve mutluluğun bir ömür süreceği bu özel günde buluşalım.",
+  "invitationText": "Hayatımızın en anlamlı gününde, sevgimizi ve geleceğimizi taçlandırırken sizleri de aramızda görmekten mutluluk duyacağız.",
+  "venue": {
+    "name": "Swissôtel The Bosphorus",
+    "address": "Vişnezade, Acısu Sk. No:19, Beşiktaş / İstanbul",
+    "city": "İstanbul",
+    "googleMapsUrl": "https://maps.google.com/?q=Swissotel+The+Bosphorus+Istanbul",
+    "appleMapsUrl": "https://maps.apple.com/?q=Swissotel+The+Bosphorus+Istanbul"
+  },
+  "giftInfo": {
+    "message": "Düğün hediyeleriniz ve takılarınız için banka hesap bilgilerimizi kullanabilirsiniz.",
+    "bankAccounts": [
+      {
+        "bankName": "Garanti BBVA",
+        "accountHolder": "Burak & Zeynep Yılmaz",
+        "iban": "TR56 0006 2000 0000 9999 8888 77",
+        "logoText": "GARANTİ"
+      }
+    ]
+  },
+  "supabaseUrl": "https://zmzyhzdncotixzfequuu.supabase.co",
+  "supabaseAnonKey": "sb_publishable_zBu2x_uZtj6Ee4plvxTawg_PXhWiXky"
+}

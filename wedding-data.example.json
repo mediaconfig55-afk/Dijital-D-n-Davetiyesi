@@ -1,26 +1,78 @@
 {
-  "brideName": "Zeynep",
-  "groomName": "Burak",
-  "coupleInitials": "B & Z",
-  "weddingDate": "2026-10-10T19:00:00",
-  "displayDate": "10 Ekim 2026, Cumartesi",
+  "brideName": "Merve",
+  "groomName": "Erçin",
+  "coupleInitials": "M & E",
+  "weddingDate": "2026-09-19T19:00:00",
+  "displayDate": "19 Eylül 2026, Cumartesi",
   "displayTime": "19:00",
-  "slogan": "Sevginin ve mutluluğun bir ömür süreceği bu özel günde buluşalım.",
-  "invitationText": "Hayatımızın en anlamlı gününde, sevgimizi ve geleceğimizi taçlandırırken sizleri de aramızda görmekten mutluluk duyacağız.",
+  "slogan": "Bu güzel günümüzde sizleri de aramızda görmekten mutluluk duyarız!",
+  "invitationText": "Düğünümüze hoş geldiniz! Mutluluğumuza ortak olmanız bizleri onurlandıracaktır.",
   "venue": {
-    "name": "Swissôtel The Bosphorus",
-    "address": "Vişnezade, Acısu Sk. No:19, Beşiktaş / İstanbul",
-    "city": "İstanbul",
-    "googleMapsUrl": "https://maps.google.com/?q=Swissotel+The+Bosphorus+Istanbul",
-    "appleMapsUrl": "https://maps.apple.com/?q=Swissotel+The+Bosphorus+Istanbul"
+    "name": "Güneş Düğün Salonu",
+    "address": "19 Mayıs, Fuar Cd. No:14, 55020 İlkadım / Samsun",
+    "city": "Samsun",
+    "googleMapsUrl": "https://maps.google.com/?q=Gunes+Dugun+Salonu+Samsun",
+    "appleMapsUrl": "https://maps.apple.com/?q=Gunes+Dugun+Salonu+Samsun"
   },
+  "schedule": [
+    {
+      "time": "19:00",
+      "title": "Karşılama & Kokteyl",
+      "description": "Misafirlerimizin karşılanması ve canlı müzik eşliğinde açılış kokteyli."
+    },
+    {
+      "time": "20:00",
+      "title": "Nikah Töreni",
+      "description": "Büyük buluşma ve hayatlarımızı birleştirdiğimiz o özel an."
+    },
+    {
+      "time": "20:45",
+      "title": "Düğün Yemeği",
+      "description": "Zarif lezzetler ve sevdiklerimizle birlikte akşam yemeği."
+    },
+    {
+      "time": "22:00 - 01:00",
+      "title": "Eğlence & After Party",
+      "description": "Gece boyunca sürecek coşkulu kutlama ve unutulmaz anlar."
+    }
+  ],
+  "storyTimeline": [
+    {
+      "id": "1",
+      "icon": "❤️",
+      "title": "Tanıştık",
+      "date": "2022",
+      "description": "Hayatımızı değiştiren ilk karşılaşma."
+    },
+    {
+      "id": "2",
+      "icon": "☕",
+      "title": "İlk Kahve",
+      "date": "2023",
+      "description": "Saatlerce süren tatlı sohbetler ve unutulmaz bir buluşma."
+    },
+    {
+      "id": "3",
+      "icon": "💍",
+      "title": "Evlilik Teklifi",
+      "date": "2025",
+      "description": "Yıldızların altında sonsuzluğa 'Evet' dediğimiz an."
+    },
+    {
+      "id": "4",
+      "icon": "👰",
+      "title": "Düğün Günü",
+      "date": "19 Eylül 2026",
+      "description": "Tüm sevdiklerimizle bir araya geldiğimiz en mutlu günümüz."
+    }
+  ],
   "giftInfo": {
     "message": "Düğün hediyeleriniz ve takılarınız için banka hesap bilgilerimizi kullanabilirsiniz.",
     "bankAccounts": [
       {
         "bankName": "Garanti BBVA",
-        "accountHolder": "Burak & Zeynep Yılmaz",
-        "iban": "TR56 0006 2000 0000 9999 8888 77",
+        "accountHolder": "Erçin & Merve Bilgin",
+        "iban": "TR00 0000 0000 0000 0000 0000 00",
         "logoText": "GARANTİ"
       }
     ]

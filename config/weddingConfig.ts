@@ -1,11 +1,8 @@
-/**
- * Centralized Wedding Configuration
- * All contents, names, dates, maps, IBANs, and flags can be edited here easily.
- */
+﻿import { WeddingConfig } from './weddingConfig';
 
 export interface StoryTimelineItem {
   id: string;
-  icon: string; // Emoji or Icon identifier
+  icon: string;
   title: string;
   date: string;
   description: string;
@@ -29,7 +26,7 @@ export interface WeddingConfig {
   brideName: string;
   groomName: string;
   coupleInitials: string;
-  weddingDate: string; // YYYY-MM-DD THH:mm:ss format for Countdown
+  weddingDate: string;
   displayDate: string;
   displayTime: string;
   slogan: string;
@@ -40,10 +37,6 @@ export interface WeddingConfig {
     city: string;
     googleMapsUrl: string;
     appleMapsUrl: string;
-    coordinates?: {
-      lat: number;
-      lng: number;
-    };
   };
   schedule: Array<{
     time: string;
@@ -56,83 +49,83 @@ export interface WeddingConfig {
     message: string;
     bankAccounts: BankAccount[];
   };
-  audioUrl?: string; // Optional background music URL
-  isPostWeddingMode: boolean; // Toggle true to turn page into post-wedding memory page
+  audioUrl?: string;
+  isPostWeddingMode: boolean;
 }
 
 export const weddingConfig: WeddingConfig = {
-  brideName: "Ayşe",
-  groomName: "Emre",
-  coupleInitials: "E & A",
-  weddingDate: "2026-09-19T19:00:00",
-  displayDate: "19 Eylül 2026, Cumartesi",
+  brideName: "Zeynep",
+  groomName: "Burak",
+  coupleInitials: "B & Z",
+  weddingDate: "2026-10-10T19:00:00",
+  displayDate: "10 Ekim 2026, Cumartesi",
   displayTime: "19:00",
-  slogan: "Birlikte sonsuzluğa ilk adımımızı atıyoruz.",
-  invitationText: "Hayatımızın en özel gününde, mutluluğumuza ve ortak geleceğimizin ilk gününe tanıklık etmeniz bizleri onurlandıracaktır.",
+  slogan: "Sevginin ve mutluluÄŸun bir Ã¶mÃ¼r sÃ¼receÄŸi bu Ã¶zel gÃ¼nde buluÅŸalÄ±m.",
+  invitationText: "HayatÄ±mÄ±zÄ±n en anlamlÄ± gÃ¼nÃ¼nde, sevgimizi ve geleceÄŸimizi taÃ§landÄ±rÄ±rken sizleri de aramÄ±zda gÃ¶rmekten mutluluk duyacaÄŸÄ±z.",
   venue: {
-    name: "Ciragan Palace Kempinski",
-    address: "Yıldız, Çırağan Cd. No:32, Beşiktaş / İstanbul",
-    city: "İstanbul",
-    googleMapsUrl: "https://maps.google.com/?q=Ciragan+Palace+Kempinski+Istanbul",
-    appleMapsUrl: "https://maps.apple.com/?q=Ciragan+Palace+Kempinski+Istanbul",
+    name: "SwissÃ´tel The Bosphorus",
+    address: "ViÅŸnezade, AcÄ±su Sk. No:19, BeÅŸiktaÅŸ / Ä°stanbul",
+    city: "Ä°stanbul",
+    googleMapsUrl: "https://maps.google.com/?q=Swissotel+The+Bosphorus+Istanbul",
+    appleMapsUrl: "https://maps.apple.com/?q=Swissotel+The+Bosphorus+Istanbul",
   },
   schedule: [
     {
       time: "19:00",
-      title: "Karşılama & Kokteyl",
-      description: "Misafirlerimizin karşılanması ve canlı müzik eşliğinde açılış kokteyli.",
+      title: "Karsilama & Kokteyl",
+      description: "Misafirlerimizin karsilanmasi ve canli muzik esliginde acilis kokteyli.",
     },
     {
       time: "20:00",
-      title: "Nikah Töreni",
-      description: "Büyük buluşma ve hayatlarımızı birleştirdiğimiz o özel an.",
+      title: "Nikah Toreni",
+      description: "Buyuk bulusma ve hayatlarimizi birlestirdigimiz o ozel an.",
     },
     {
       time: "20:45",
-      title: "Düğün Yemeği",
-      description: "Zarif lezzetler ve sevdiklerimizle birlikte akşam yemeği.",
+      title: "Dugun Yemegi",
+      description: "Zarif lezzetler ve sevdiklerimizle birlikte aksam yemegi.",
     },
     {
       time: "22:00 - 01:00",
-      title: "Eğlence & After Party",
-      description: "Gece boyunca sürecek coşkulu kutlama ve unutulmaz anlar.",
+      title: "Eglence & After Party",
+      description: "Gece boyunca surecek coskulu kutlama ve unutulmaz anlar.",
     },
   ],
   storyTimeline: [
     {
       id: "1",
-      icon: "❤️",
-      title: "Tanıştık",
-      date: "14 Mayıs 2021",
-      description: "Ortak dostlarımızın vesilesiyle başlayan ve hayatımızı değiştiren ilk karşılaşma.",
+      icon: "â¤ï¸",
+      title: "Tanistik",
+      date: "2022",
+      description: "Hayatimizi degistiren ilk karsilasma.",
     },
     {
       id: "2",
-      icon: "☕",
-      title: "İlk Kahve",
-      date: "22 Mayıs 2021",
-      description: "Saatlerce süren tatlı sohbetler ve unutulmaz bir akşamüstü buluşması.",
+      icon: "â˜•",
+      title: "Ilk Kahve",
+      date: "2023",
+      description: "Saatlerce sureen tatli sohbetler ve unutulmaz bir bulusma.",
     },
     {
       id: "3",
-      icon: "💍",
+      icon: "ğŸ’",
       title: "Evlilik Teklifi",
-      date: "14 Şubat 2025",
-      description: "Yıldızların altında, sonsuzluğa 'Evet' dediğimiz o büyüleyici an.",
+      date: "2025",
+      description: "Yildizlarin altinda sonsuzluga 'Evet' dedigimiz an.",
     },
     {
       id: "4",
-      icon: "👰",
-      title: "Düğün Günü",
-      date: "19 Eylül 2026",
-      description: "Tüm sevdiklerimizle bir araya geldiğimiz en mutlu günümüz.",
+      icon: "ğŸ‘°",
+      title: "Dugun Gunu",
+      date: "10 Ekim 2026, Cumartesi",
+      description: "Tum sevdiklerimizle bir araya geldigimiz en mutlu gunumuz.",
     },
   ],
   galleryPhotos: [
     {
       id: "g1",
       url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80",
-      caption: "Büyülü bir akşamdan",
+      caption: "Buyulu bir aksamdan",
       aspectRatio: "portrait",
     },
     {
@@ -144,45 +137,21 @@ export const weddingConfig: WeddingConfig = {
     {
       id: "g3",
       url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=80",
-      caption: "Aşkla bakışlar",
-      aspectRatio: "portrait",
-    },
-    {
-      id: "g4",
-      url: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1000&q=80",
-      caption: "Birlikte her mevsim",
-      aspectRatio: "square",
-    },
-    {
-      id: "g5",
-      url: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=1000&q=80",
-      caption: "Teklif günümüz",
-      aspectRatio: "landscape",
-    },
-    {
-      id: "g6",
-      url: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=1000&q=80",
-      caption: "Sonsuz tebessüm",
+      caption: "Askla bakislar",
       aspectRatio: "portrait",
     },
   ],
   giftInfo: {
-    message: "Düğün hediyeniz veya takılarınız için banka hesap bilgilerimizi kullanabilirsiniz. Nazik düşünceleriniz için teşekkür ederiz.",
+    message: "DÃ¼ÄŸÃ¼n hediyeleriniz ve takÄ±larÄ±nÄ±z iÃ§in banka hesap bilgilerimizi kullanabilirsiniz.",
     bankAccounts: [
       {
         bankName: "Garanti BBVA",
-        accountHolder: "Emre & Ayşe Yılmaz",
-        iban: "TR56 0006 2000 0000 1234 5678 90",
-        logoText: "GARANTİ",
-      },
-      {
-        bankName: "Türkiye İş Bankası",
-        accountHolder: "Emre Yılmaz",
-        iban: "TR12 0006 4000 0000 9876 5432 10",
-        logoText: "İŞ BANKASI",
+        accountHolder: "Burak & Zeynep YÄ±lmaz",
+        iban: "TR56 0006 2000 0000 9999 8888 77",
+        logoText: "Garanti BBVA",
       },
     ],
   },
   audioUrl: "https://assets.mixkit.co/music/preview/mixkit-romantic-wedding-piano-1107.mp3",
-  isPostWeddingMode: false, // Set true after wedding to turn site into Memory Album
+  isPostWeddingMode: false,
 };

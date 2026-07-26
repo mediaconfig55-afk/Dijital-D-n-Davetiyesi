@@ -54,20 +54,20 @@ export interface WeddingConfig {
 }
 
 export const weddingConfig: WeddingConfig = {
-  brideName: "Zeynep",
-  groomName: "Burak",
-  coupleInitials: "B & Z",
-  weddingDate: "2026-10-10T19:00:00",
-  displayDate: "10 Ekim 2026, Cumartesi",
+  brideName: "Merve",
+  groomName: "Erçin",
+  coupleInitials: "M & E",
+  weddingDate: "2026-09-19T19:00:00",
+  displayDate: "19 Eylül 2026 Cumartesi",
   displayTime: "19:00",
-  slogan: "Sevginin ve mutluluÄŸun bir Ã¶mÃ¼r sÃ¼receÄŸi bu Ã¶zel gÃ¼nde buluÅŸalÄ±m.",
-  invitationText: "HayatÄ±mÄ±zÄ±n en anlamlÄ± gÃ¼nÃ¼nde, sevgimizi ve geleceÄŸimizi taÃ§landÄ±rÄ±rken sizleri de aramÄ±zda gÃ¶rmekten mutluluk duyacaÄŸÄ±z.",
+  slogan: "Bu güzel Günümüzde Sizleride Aramızda Görmekten Mutluluk Duyarız...!",
+  invitationText: "Düğünümüze Hoş Geldiniz...!",
   venue: {
-    name: "SwissÃ´tel The Bosphorus",
-    address: "ViÅŸnezade, AcÄ±su Sk. No:19, BeÅŸiktaÅŸ / Ä°stanbul",
-    city: "Ä°stanbul",
-    googleMapsUrl: "https://maps.google.com/?q=Swissotel+The+Bosphorus+Istanbul",
-    appleMapsUrl: "https://maps.apple.com/?q=Swissotel+The+Bosphorus+Istanbul",
+    name: "Güneş Düğün Salonu",
+    address: "Güneş Düğün Salonu, 19 Mayıs, Fuar Cd. No:14, 55020 İlkadım/Samsun",
+    city: "Samsun Fuar İçi",
+    googleMapsUrl: "google.com/maps/place//data=!4m2!3m1!1s0x408877db47e82e8b:0xebf511a89020842d?sa=X&ved=1t:8290&ictx=111",
+    appleMapsUrl: "google.com/maps/place//data=!4m2!3m1!1s0x408877db47e82e8b:0xebf511a89020842d?sa=X&ved=1t:8290&ictx=111",
   },
   schedule: [
     {
@@ -117,7 +117,7 @@ export const weddingConfig: WeddingConfig = {
       id: "4",
       icon: "ğŸ‘°",
       title: "Dugun Gunu",
-      date: "10 Ekim 2026, Cumartesi",
+      date: "19 Eylül 2026 Cumartesi",
       description: "Tum sevdiklerimizle bir araya geldigimiz en mutlu gunumuz.",
     },
   ],
@@ -142,13 +142,13 @@ export const weddingConfig: WeddingConfig = {
     },
   ],
   giftInfo: {
-    message: "DÃ¼ÄŸÃ¼n hediyeleriniz ve takÄ±larÄ±nÄ±z iÃ§in banka hesap bilgilerimizi kullanabilirsiniz.",
+    message: "Pamuk Eller İban Bilgilerine !",
     bankAccounts: [
       {
-        bankName: "Garanti BBVA",
-        accountHolder: "Burak & Zeynep YÄ±lmaz",
-        iban: "TR56 0006 2000 0000 9999 8888 77",
-        logoText: "Garanti BBVA",
+        bankName: "Garanti",
+        accountHolder: "Emre Bilgin",
+        iban: "TR0000-0000-0000-0000-0000",
+        logoText: "Garanti",
       },
     ],
   },

@@ -1,5 +1,3 @@
-﻿import { WeddingConfig } from './weddingConfig';
-
 export interface StoryTimelineItem {
   id: string;
   icon: string;

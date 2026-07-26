@@ -84,8 +84,6 @@ Write-Host "[+] Davetiye verileri isleniyor..." -ForegroundColor Green
 
 # 2. config/weddingConfig.ts Guncelleme
 $tsCode = @"
-import { WeddingConfig } from './weddingConfig';
-
 export interface StoryTimelineItem {
   id: string;
   icon: string;

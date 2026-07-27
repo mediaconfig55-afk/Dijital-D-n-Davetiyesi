@@ -88,3 +88,28 @@ create policy "Allow public insert access to attendance"
 create policy "Allow public read access to attendance"
   on public.attendance for select
   using (true);
+
+
+-- 5. PHOTO CONSENTS TABLE (KVKK Compliance)
+-- Stores explicit consent records before photo uploads
+-- Used as legal proof that the guest read and accepted the privacy terms
+create table if not exists public.photo_consents (
+  id uuid default gen_random_uuid() primary key,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  guest_name text not null,
+  consent_text_version text not null default 'v1.0',
+  consent_given boolean not null default true,
+  photo_id uuid references public.photos(id) on delete set null
+);
+
+-- Enable RLS on photo_consents
+alter table public.photo_consents enable row level security;
+
+-- RLS Policies for photo_consents
+create policy "Allow public insert access to photo_consents"
+  on public.photo_consents for insert
+  with check (true);
+
+create policy "Allow public read access to photo_consents"
+  on public.photo_consents for select
+  using (true);

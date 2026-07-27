@@ -3,8 +3,31 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase, isSupabaseConfigured, PhotoRecord } from '@/lib/supabaseClient';
-import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertCircle, Heart, Sparkles } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertCircle, Heart, Sparkles, ShieldCheck, X, ScrollText } from 'lucide-react';
 import confetti from 'canvas-confetti';
+
+const KVKK_CONSENT_VERSION = 'v1.0';
+
+const KVKK_CONSENT_TEXT = `Kişisel Verilerin Korunması Hakkında Aydınlatma ve Açık Rıza Metni
+
+6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, dijital düğün davetiyesi platformuna fotoğraf yükleyerek aşağıdaki hususları kabul etmiş sayılırsınız:
+
+1. Toplanan Veriler
+Yüklediğiniz fotoğraf(lar), adınız-soyadınız ve varsa mesajınız işlenecektir.
+
+2. İşlenme Amacı
+Yüklediğiniz fotoğraflar, düğün anı albümü oluşturmak amacıyla dijital ortamda saklanacak ve düğün davetiyesi web sitesinde diğer misafirler tarafından görüntülenebilecektir.
+
+3. Saklama Süresi
+Fotoğraflar ve ilgili kişisel veriler, veri sorumlusu tarafından silinene kadar bulut depolama hizmetinde saklanacaktır.
+
+4. Üçüncü Taraflarla Paylaşım
+Verileriniz, hosting ve depolama hizmeti sağlayıcısı dışında herhangi bir üçüncü tarafla paylaşılmayacaktır.
+
+5. Haklarınız
+KVKK'nın 11. maddesi gereğince; kişisel verilerinizin işlenip işlenmediğini öğrenme, düzeltilmesini veya silinmesini talep etme haklarına sahipsiniz. Bu haklarınızı kullanmak için veri sorumlusuyla iletişime geçebilirsiniz.
+
+Bu metni okuyarak ve "Onaylıyorum" butonuna basarak, yukarıda belirtilen şartlar dahilinde fotoğrafınızın ve kişisel bilgilerinizin işlenmesine açık rıza vermiş olursunuz.`;
 
 interface MemoryBookUploadProps {
   onPhotoUploaded?: (photo: PhotoRecord) => void;
@@ -20,6 +43,12 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // KVKK Consent State
+  const [showConsentModal, setShowConsentModal] = useState(false);
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [consentName, setConsentName] = useState('');
+  const [consentError, setConsentError] = useState<string | null>(null);
 
   const MAX_FILE_SIZE_MB = 10;
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic'];
@@ -60,16 +89,47 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
     }
   };
 
-  const handleUploadSubmit = async (e: React.FormEvent) => {
+  // When user clicks "Send", open consent modal instead of uploading directly
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
       setErrorMsg('Lütfen önce bir fotoğraf seçin.');
       return;
     }
 
+    // Pre-fill consent name from guest name field
+    if (guestName.trim()) {
+      setConsentName(guestName.trim());
+    }
+
+    setConsentError(null);
+    setConsentChecked(false);
+    setShowConsentModal(true);
+  };
+
+  // Actual upload after consent is given
+  const handleConsentAndUpload = async () => {
+    // Validate consent
+    if (!consentName.trim()) {
+      setConsentError('Onay için adınızı ve soyadınızı girmeniz zorunludur.');
+      return;
+    }
+    if (!consentChecked) {
+      setConsentError('Devam etmek için gizlilik metnini okuyup onay kutusunu işaretlemeniz gerekmektedir.');
+      return;
+    }
+
+    setShowConsentModal(false);
     setIsUploading(true);
     setUploadProgress(20);
     setErrorMsg(null);
+
+    // Use consent name as the guest name if not already set
+    if (!guestName.trim()) {
+      setGuestName(consentName.trim());
+    }
+
+    const finalGuestName = guestName.trim() || consentName.trim();
 
     try {
       let finalPhotoUrl = previewUrl || '';
@@ -77,14 +137,14 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
 
       if (isSupabaseConfigured) {
         // Upload to Supabase Storage
-        const fileExt = selectedFile.name.split('.').pop();
+        const fileExt = selectedFile!.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
         storagePath = `guest_uploads/${fileName}`;
 
-        setUploadProgress(50);
+        setUploadProgress(40);
         const { data: storageData, error: storageError } = await supabase.storage
           .from('wedding-photos')
-          .upload(storagePath, selectedFile, {
+          .upload(storagePath, selectedFile!, {
             cacheControl: '3600',
             upsert: false,
           });
@@ -93,19 +153,19 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           throw new Error(`Depolama hatası: ${storageError.message}`);
         }
 
-        setUploadProgress(75);
+        setUploadProgress(60);
         const { data: publicUrlData } = supabase.storage
           .from('wedding-photos')
           .getPublicUrl(storageData.path);
 
         finalPhotoUrl = publicUrlData.publicUrl;
 
-        // Insert record into Supabase Database
+        // Insert photo record into database
         const { data: dbData, error: dbError } = await supabase
           .from('photos')
           .insert([
             {
-              guest_name: guestName.trim() || 'İsimsiz Misafir',
+              guest_name: finalGuestName,
               message: message.trim() || null,
               photo_url: finalPhotoUrl,
               storage_path: storagePath,
@@ -116,6 +176,25 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
 
         if (dbError) {
           throw new Error(`Veritabanı hatası: ${dbError.message}`);
+        }
+
+        setUploadProgress(85);
+
+        // Insert KVKK consent record linked to the photo
+        const { error: consentDbError } = await supabase
+          .from('photo_consents')
+          .insert([
+            {
+              guest_name: consentName.trim(),
+              consent_text_version: KVKK_CONSENT_VERSION,
+              consent_given: true,
+              photo_id: dbData?.id || null,
+            },
+          ]);
+
+        if (consentDbError) {
+          console.error('Consent record error:', consentDbError);
+          // Don't throw — photo is already uploaded, consent is secondary
         }
 
         if (dbData && onPhotoUploaded) {
@@ -146,6 +225,8 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
         setGuestName('');
         setMessage('');
         setIsSuccess(false);
+        setConsentName('');
+        setConsentChecked(false);
       }, 4000);
 
     } catch (err: any) {
@@ -178,7 +259,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
         </div>
 
         {/* Upload Form */}
-        <form onSubmit={handleUploadSubmit} className="space-y-6">
+        <form onSubmit={handleFormSubmit} className="space-y-6">
           {/* Drag & Drop / File Picker Area */}
           <div
             onClick={() => fileInputRef.current?.click()}
@@ -321,6 +402,136 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           </button>
         </form>
       </motion.div>
+
+      {/* ========== KVKK CONSENT MODAL ========== */}
+      <AnimatePresence>
+        {showConsentModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={(e) => { if (e.target === e.currentTarget) setShowConsentModal(false); }}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl border border-gold-400/30 bg-gradient-to-b from-neutral-900 to-black shadow-2xl overflow-hidden"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-5 border-b border-neutral-800">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-full bg-gold-500/10 border border-gold-400/30">
+                    <ShieldCheck className="w-5 h-5 text-gold-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-neutral-100">
+                      Gizlilik ve KVKK Onayı
+                    </h3>
+                    <p className="text-xs text-neutral-400">
+                      Fotoğraf yüklemeden önce onayınız gerekmektedir
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowConsentModal(false)}
+                  className="p-1.5 rounded-full hover:bg-neutral-800 transition-colors text-neutral-400 hover:text-neutral-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Scrollable Consent Text */}
+              <div className="flex-1 overflow-y-auto p-5">
+                <div className="flex items-center gap-2 text-gold-400 mb-3">
+                  <ScrollText className="w-4 h-4" />
+                  <span className="text-xs uppercase tracking-wider font-medium">Aydınlatma Metni</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-black/60 border border-neutral-800 text-sm text-neutral-300 leading-relaxed whitespace-pre-line max-h-52 overflow-y-auto scrollbar-thin">
+                  {KVKK_CONSENT_TEXT}
+                </div>
+
+                {/* Consent Name Input */}
+                <div className="mt-5">
+                  <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
+                    Adınız Soyadınız <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={consentName}
+                    onChange={(e) => { setConsentName(e.target.value); setConsentError(null); }}
+                    placeholder="Adınızı ve soyadınızı girin"
+                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors"
+                    autoFocus
+                  />
+                </div>
+
+                {/* Consent Checkbox */}
+                <label className="flex items-start gap-3 mt-5 cursor-pointer group">
+                  <div className="relative mt-0.5">
+                    <input
+                      type="checkbox"
+                      checked={consentChecked}
+                      onChange={(e) => { setConsentChecked(e.target.checked); setConsentError(null); }}
+                      className="sr-only peer"
+                    />
+                    <div className="w-5 h-5 rounded-md border-2 border-neutral-600 peer-checked:border-gold-400 peer-checked:bg-gold-400 transition-all flex items-center justify-center group-hover:border-gold-400/60">
+                      {consentChecked && (
+                        <svg className="w-3 h-3 text-black" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="2 6 5 9 10 3" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-sm text-neutral-300 leading-snug">
+                    Yukarıdaki <strong className="text-gold-400">Kişisel Verilerin Korunması Aydınlatma Metnini</strong> okudum ve fotoğrafımın dijital ortamda işlenmesine açık rıza veriyorum.
+                  </span>
+                </label>
+
+                {/* Consent Error */}
+                <AnimatePresence>
+                  {consentError && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="flex items-center gap-2 p-3 mt-4 rounded-xl bg-red-950/60 border border-red-800/60 text-red-200 text-xs"
+                    >
+                      <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                      <span>{consentError}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Modal Footer Buttons */}
+              <div className="p-5 border-t border-neutral-800 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                  onClick={() => setShowConsentModal(false)}
+                  className="px-5 py-2.5 rounded-xl border border-neutral-700 text-neutral-300 text-sm font-medium hover:bg-neutral-800 transition-colors"
+                >
+                  Vazgeç
+                </button>
+                <button
+                  onClick={handleConsentAndUpload}
+                  disabled={!consentChecked || !consentName.trim()}
+                  className="px-5 py-2.5 rounded-xl bg-gold-gradient text-black text-sm font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none shadow-gold-glow"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  Onaylıyorum ve Gönder
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

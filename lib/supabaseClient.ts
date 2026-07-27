@@ -37,3 +37,12 @@ export interface AttendanceRecord {
   guest_count: number;
   note?: string;
 }
+
+export interface PhotoConsentRecord {
+  id: string;
+  created_at: string;
+  guest_name: string;
+  consent_text_version: string;
+  consent_given: boolean;
+  photo_id?: string;
+}

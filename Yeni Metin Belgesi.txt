@@ -1,0 +1,16 @@
+1️⃣ JSON dosyasıyla (önerilen)
+Önce 
+
+wedding-data.example.json
+ dosyasını düzenleyin, sonra:
+
+powershell
+powershell -ExecutionPolicy Bypass -File .\new-wedding.ps1 -ConfigFile .\wedding-data.example.json
+2️⃣ Etkileşimli mod (adım adım sorarak)
+powershell
+powershell -ExecutionPolicy Bypass -File .\new-wedding.ps1
+Bu durumda script size sırayla gelin adı, damat adı, tarih, mekan vb. soruları sorar.
+
+Not: Terminalde hâlâ eski bir .\new-wedding.ps1 çalışıyor görünüyor (1 saat 43 dakikadır). Git push onayı bekliyor olabilir. Önce onu Ctrl+C ile kapatmanızı öneririm.
+
+1:10 AM

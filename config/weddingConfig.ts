@@ -1,4 +1,4 @@
-﻿export interface StoryTimelineItem {
+export interface StoryTimelineItem {
   id: string;
   icon: string;
   title: string;
@@ -100,6 +100,6 @@ export const weddingConfig: WeddingConfig = {
       },
     ],
   },
-  audioUrl: "https://assets.mixkit.co/music/preview/mixkit-romantic-wedding-piano-1107.mp3",
+  audioUrl: "audio/wedding-music.mp3",
   isPostWeddingMode: false,
 };

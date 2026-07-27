@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase, isSupabaseConfigured, PhotoRecord } from '@/lib/supabaseClient';
-import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertCircle, Heart, Sparkles, ShieldCheck, X, ScrollText, ZoomIn, Camera } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertCircle, Heart, Sparkles, ShieldCheck, X, ScrollText } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const KVKK_CONSENT_VERSION = 'v1.0';
@@ -44,10 +44,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
   const [isSuccess, setIsSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Live Uploaded Photos State & Lightbox
-  const [uploadedPhotos, setUploadedPhotos] = useState<PhotoRecord[]>([]);
-  const [activeLightboxPhoto, setActiveLightboxPhoto] = useState<PhotoRecord | null>(null);
-
   // KVKK Consent State
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
@@ -56,24 +52,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
 
   const MAX_FILE_SIZE_MB = 10;
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic'];
-
-  // Load guest photos from Supabase on mount
-  useEffect(() => {
-    if (!isSupabaseConfigured) return;
-
-    const fetchPhotos = async () => {
-      const { data } = await supabase
-        .from('photos')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (data) {
-        setUploadedPhotos(data as PhotoRecord[]);
-      }
-    };
-
-    fetchPhotos();
-  }, []);
 
   const validateAndSetFile = (file: File) => {
     setErrorMsg(null);
@@ -214,24 +192,12 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           console.error('Consent record error:', consentDbError);
         }
 
-        if (dbData) {
-          setUploadedPhotos((prev) => [dbData as PhotoRecord, ...prev]);
-          if (onPhotoUploaded) {
-            onPhotoUploaded(dbData as PhotoRecord);
-          }
+        if (dbData && onPhotoUploaded) {
+          onPhotoUploaded(dbData as PhotoRecord);
         }
       } else {
         // Fallback demo mock
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        const mockRecord: PhotoRecord = {
-          id: String(Date.now()),
-          created_at: new Date().toISOString(),
-          guest_name: finalGuestName,
-          message: message.trim() || undefined,
-          photo_url: previewUrl || '',
-          storage_path: 'local-preview',
-        };
-        setUploadedPhotos((prev) => [mockRecord, ...prev]);
         setUploadProgress(100);
       }
 
@@ -266,7 +232,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
   };
 
   return (
-    <section className="py-20 px-4 relative z-10 max-w-4xl mx-auto space-y-16">
+    <section className="py-20 px-4 relative z-10 max-w-3xl mx-auto">
       {/* Upload Form Card */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -432,130 +398,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           </button>
         </form>
       </motion.div>
-
-      {/* ========== LIVE UPLOADED GUEST PHOTOS STREAM ========== */}
-      {uploadedPhotos.length > 0 && (
-        <div className="space-y-8">
-          <div className="text-center">
-            <span className="text-xs uppercase tracking-[0.3em] text-gold-400 font-medium flex items-center justify-center gap-2">
-              <Camera className="w-4 h-4" /> Düğün Anı Duvarı
-            </span>
-            <h3 className="font-serif text-2xl sm:text-4xl text-neutral-100 font-light mt-2">
-              Misafirlerimizden Gelen Kareler
-            </h3>
-            <p className="text-xs text-neutral-400 mt-1">
-              Fotoğrafların üzerine tıklayarak büyük boyutta görüntüleyebilirsiniz
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-            {uploadedPhotos.map((photo) => (
-              <motion.div
-                key={photo.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                onClick={() => setActiveLightboxPhoto(photo)}
-                className="group relative rounded-2xl overflow-hidden glass-card-gold border-gold-500/20 hover:border-gold-400/60 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.02]"
-              >
-                {/* Image Preview Box */}
-                <div className="relative h-60 w-full overflow-hidden bg-black/60">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={photo.photo_url}
-                    alt={photo.guest_name || 'Misafir fotoğrafı'}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  {/* Hover Overlay with Zoom Icon */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <div className="p-3 rounded-full bg-black/70 border border-gold-400/60 text-gold-300">
-                      <ZoomIn className="w-5 h-5" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Photo Details (Guest Name & Message) */}
-                {(photo.guest_name || photo.message) && (
-                  <div className="p-4 border-t border-gold-500/20 bg-black/40">
-                    {photo.guest_name && (
-                      <p className="font-semibold text-sm text-gold-300 flex items-center gap-1.5">
-                        <Heart className="w-3.5 h-3.5 fill-gold-400 text-gold-400 shrink-0" />
-                        {photo.guest_name}
-                      </p>
-                    )}
-                    {photo.message && (
-                      <p className="text-xs text-neutral-300 italic mt-1 line-clamp-2">
-                        &quot;{photo.message}&quot;
-                      </p>
-                    )}
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ========== FULL-SCREEN LIGHTBOX MODAL ========== */}
-      <AnimatePresence>
-        {activeLightboxPhoto && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActiveLightboxPhoto(null)}
-            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center rounded-2xl bg-neutral-950 border border-gold-400/30 overflow-hidden shadow-2xl"
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveLightboxPhoto(null)}
-                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/70 border border-gold-400/40 text-neutral-200 hover:text-gold-400 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Full Image */}
-              <div className="relative w-full h-[65vh] bg-black flex items-center justify-center overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={activeLightboxPhoto.photo_url}
-                  alt={activeLightboxPhoto.guest_name || 'Büyütülmüş Görsel'}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
-
-              {/* Caption Footer */}
-              <div className="w-full p-5 bg-gradient-to-t from-black to-neutral-950 border-t border-neutral-800 text-center">
-                {activeLightboxPhoto.guest_name && (
-                  <p className="font-serif text-lg text-gold-300 font-medium">
-                    {activeLightboxPhoto.guest_name}
-                  </p>
-                )}
-                {activeLightboxPhoto.message && (
-                  <p className="text-sm text-neutral-300 italic mt-1">
-                    &quot;{activeLightboxPhoto.message}&quot;
-                  </p>
-                )}
-                <p className="text-[10px] text-neutral-500 mt-2 uppercase tracking-widest">
-                  {new Date(activeLightboxPhoto.created_at).toLocaleDateString('tr-TR', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* ========== KVKK CONSENT MODAL ========== */}
       <AnimatePresence>

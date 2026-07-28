@@ -49,15 +49,19 @@ export interface WeddingConfig {
   };
   audioUrl?: string;
   isPostWeddingMode: boolean;
+  photoUploadStartTime?: string;
+  photoRevealTime?: string;
 }
 
 export const weddingConfig: WeddingConfig = {
   brideName: "Esma",
   groomName: "Murat",
-  coupleInitials: "M & E",
-  weddingDate: "2026-08-20T19:00:00",
-  displayDate: "20 Ağustos 2026, Cumartesi",
+  coupleInitials: "E & M",
+  weddingDate: "2026-07-30T19:00:00",
+  displayDate: "30 Temmuz 2026, Perşembe",
   displayTime: "19:00",
+  photoUploadStartTime: "2026-07-30T19:00:00",
+  photoRevealTime: "2026-07-30T23:59:59",
   slogan: "Bu güzel günümüzde sizleri de aramızda görmekten mutluluk duyarız!",
   invitationText: "Düğünümüze hoş geldiniz! Mutluluğumuza ortak olmanız bizleri onurlandıracaktır.",
   venue: {
@@ -68,7 +72,7 @@ export const weddingConfig: WeddingConfig = {
     appleMapsUrl: "https://maps.apple.com/?q=Gunes+Dugun+Salonu+Samsun",
   },
   schedule: [{"time":"19:00","title":"Salon Kapı Açılış","description":"Misafirlerimizin karşılanması ve canlı müzik eşliğinde açılış kokteyli."},{"time":"20:30","title":"Düğün Başlangıç","description":"Büyük buluşma ve hayatlarımızı birleştirdiğimiz o özel an."},{"time":"21:30","title":"Pasta Kesimi","description":"Zarif lezzetler ve sevdiklerimizle birlikte akşam yemeği."},{"time":"22:00 - 01:00","title":"Eğlence \u0026 After Party","description":"Gece boyunca sürecek coşkulu kutlama ve unutulmaz anlar."}],
-  storyTimeline: [{"id":"1","icon":"❤️","title":"Tanıştık","date":"2022","description":"Hayatımızı değiştiren ilk karşılaşma."},{"id":"2","icon":"☕","title":"İlk Kahve","date":"2023","description":"Saatlerce süren tatlı sohbetler ve unutulmaz bir buluşma."},{"id":"3","icon":"💍","title":"Evlilik Teklifi","date":"2025","description":"Yıldızların altında sonsuzluğa \u0027Evet\u0027 dediğimiz an."},{"id":"4","icon":"👰","title":"Düğün Günü","date":"19 Eylül 2026","description":"Tüm sevdiklerimizle bir araya geldiğimiz en mutlu günümüz."}],
+  storyTimeline: [{"id":"1","icon":"❤️","title":"Tanıştık","date":"2022","description":"Hayatımızı değiştiren ilk karşılaşma."},{"id":"2","icon":"☕","title":"İlk Kahve","date":"2023","description":"Saatlerce süren tatlı sohbetler ve unutulmaz bir buluşma."},{"id":"3","icon":"💍","title":"Evlilik Teklifi","date":"2025","description":"Yıldızların altında sonsuzluğa \u0027Evet\u0027 dediğimiz an."},{"id":"4","icon":"👰","title":"Düğün Günü","date":"30 Temmuz 2026","description":"Tüm sevdiklerimizle bir araya geldiğimiz en mutlu günümüz."}],
   galleryPhotos: [
     {
       id: "g1",
@@ -94,7 +98,7 @@ export const weddingConfig: WeddingConfig = {
     bankAccounts: [
       {
         bankName: "Garanti BBVA",
-        accountHolder: "Erçin & Merve Bilgin",
+        accountHolder: "Murat & Esma Bilgin",
         iban: "TR00 0000 0000 0000 0000 0000 00",
         logoText: "Garanti BBVA",
       },

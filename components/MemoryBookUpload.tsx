@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { weddingConfig } from '@/config/weddingConfig';
 import { supabase, isSupabaseConfigured, PhotoRecord } from '@/lib/supabaseClient';
-import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertCircle, Heart, Sparkles, ShieldCheck, X, ScrollText } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, CheckCircle2, AlertCircle, Heart, Sparkles, ShieldCheck, X, ScrollText, Clock, Lock, ZoomIn, Camera, EyeOff } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 const KVKK_CONSENT_VERSION = 'v1.0';
@@ -16,7 +17,7 @@ const KVKK_CONSENT_TEXT = `Kişisel Verilerin Korunması Hakkında Aydınlatma v
 Yüklediğiniz fotoğraf(lar), adınız-soyadınız ve varsa mesajınız işlenecektir.
 
 2. İşlenme Amacı
-Yüklediğiniz fotoğraflar, düğün anı albümü oluşturmak amacıyla dijital ortamda saklanacak ve düğün davetiyesi web sitesinde diğer misafirler tarafından görüntülenebilecektir.
+Yüklediğiniz fotoğraflar, düğün anı albümü oluşturmak amacıyla dijital ortamda saklanacak ve düğün gecesi belirlenen saatten itibaren dijital davetiye anı duvarında sergilenebilecektir.
 
 3. Saklama Süresi
 Fotoğraflar ve ilgili kişisel veriler, veri sorumlusu tarafından silinene kadar bulut depolama hizmetinde saklanacaktır.
@@ -44,6 +45,14 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
   const [isSuccess, setIsSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Time Gating States
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isRevealOpen, setIsRevealOpen] = useState(false);
+
+  // Photos State & Lightbox
+  const [uploadedPhotos, setUploadedPhotos] = useState<PhotoRecord[]>([]);
+  const [activeLightboxPhoto, setActiveLightboxPhoto] = useState<PhotoRecord | null>(null);
+
   // KVKK Consent State
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
@@ -52,6 +61,47 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
 
   const MAX_FILE_SIZE_MB = 10;
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic'];
+
+  // Check current time against wedding timeline
+  useEffect(() => {
+    const checkTimelineStatus = () => {
+      const now = new Date().getTime();
+
+      // Start Time (Default: Wedding date at 19:00)
+      const startTimeStr = weddingConfig.photoUploadStartTime || weddingConfig.weddingDate;
+      const startTime = new Date(startTimeStr).getTime();
+
+      // Reveal Time (Default: 23:59:59 of wedding date / 00:00 midnight)
+      const revealTimeStr = weddingConfig.photoRevealTime || weddingConfig.weddingDate;
+      const revealTime = new Date(revealTimeStr).getTime();
+
+      setIsUploadOpen(now >= startTime);
+      setIsRevealOpen(now >= revealTime);
+    };
+
+    checkTimelineStatus();
+    const interval = setInterval(checkTimelineStatus, 5000); // Check every 5s
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Load photos if reveal time is reached
+  useEffect(() => {
+    if (!isSupabaseConfigured || !isRevealOpen) return;
+
+    const fetchPhotos = async () => {
+      const { data } = await supabase
+        .from('photos')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (data) {
+        setUploadedPhotos(data as PhotoRecord[]);
+      }
+    };
+
+    fetchPhotos();
+  }, [isRevealOpen]);
 
   const validateAndSetFile = (file: File) => {
     setErrorMsg(null);
@@ -89,7 +139,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
     }
   };
 
-  // Open KVKK consent modal on form submit
+  // Open KVKK modal on submit
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -176,7 +226,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
 
         setUploadProgress(85);
 
-        // Insert KVKK consent record linked to photo
+        // Insert KVKK consent record
         const { error: consentDbError } = await supabase
           .from('photo_consents')
           .insert([
@@ -192,8 +242,13 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           console.error('Consent record error:', consentDbError);
         }
 
-        if (dbData && onPhotoUploaded) {
-          onPhotoUploaded(dbData as PhotoRecord);
+        if (dbData) {
+          if (isRevealOpen) {
+            setUploadedPhotos((prev) => [dbData as PhotoRecord, ...prev]);
+          }
+          if (onPhotoUploaded) {
+            onPhotoUploaded(dbData as PhotoRecord);
+          }
         }
       } else {
         // Fallback demo mock
@@ -205,7 +260,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
       setIsUploading(false);
       setIsSuccess(true);
 
-      // Trigger Confetti
+      // Confetti
       confetti({
         particleCount: 80,
         spread: 70,
@@ -213,7 +268,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
         colors: ['#D4AF37', '#FFF7D6', '#E8C39E'],
       });
 
-      // Reset form fields
+      // Reset form
       setTimeout(() => {
         setSelectedFile(null);
         setPreviewUrl(null);
@@ -232,15 +287,15 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
   };
 
   return (
-    <section className="py-20 px-4 relative z-10 max-w-3xl mx-auto">
-      {/* Upload Form Card */}
+    <section className="py-20 px-4 relative z-10 max-w-4xl mx-auto space-y-16">
+      {/* Upload Section Card */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         className="glass-card-gold p-6 sm:p-10 relative overflow-hidden"
       >
-        {/* Section Title */}
+        {/* Title */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 text-gold-400 mb-2">
             <Heart className="w-5 h-5 fill-gold-400" />
@@ -254,152 +309,311 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           </p>
         </div>
 
-        {/* Upload Form */}
-        <form onSubmit={handleFormSubmit} className="space-y-6">
-          {/* File Picker Area */}
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            className="border-2 border-dashed border-gold-400/40 hover:border-gold-400 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-black/40 hover:bg-black/60 group relative overflow-hidden"
-          >
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              accept="image/*"
-              className="hidden"
-            />
-
-            {previewUrl ? (
-              <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gold-500/40">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={previewUrl}
-                  alt="Önizleme"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-xs text-gold-300 font-medium bg-black/70 px-4 py-2 rounded-full border border-gold-400/50">
-                    Fotoğrafı Değiştir
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-4">
-                <div className="p-4 rounded-full bg-gold-500/10 border border-gold-400/30 text-gold-400 mb-3 group-hover:scale-110 transition-transform">
-                  <UploadCloud className="w-8 h-8" />
-                </div>
-                <p className="text-sm font-medium text-neutral-200">
-                  Fotoğrafınızı Seçin veya Sürükleyip Bırakın
-                </p>
-                <p className="text-xs text-neutral-400 mt-1">
-                  (Telefon galerisinden seçebilir veya anlık çekebilirsiniz)
-                </p>
-              </div>
-            )}
+        {/* TIME STAGE 1: BEFORE 19:00 (LOCKED) */}
+        {!isUploadOpen ? (
+          <div className="text-center p-8 sm:p-12 rounded-2xl bg-black/50 border border-gold-500/30 space-y-4">
+            <div className="w-16 h-16 rounded-full bg-gold-500/10 border border-gold-400/40 flex items-center justify-center mx-auto text-gold-400 animate-pulse">
+              <Lock className="w-8 h-8" />
+            </div>
+            <h3 className="font-serif text-xl sm:text-2xl text-neutral-100 font-light">
+              Fotoğraf Yükleme Henüz Açılmadı
+            </h3>
+            <p className="text-sm text-gold-300 font-medium">
+              📷 Fotoğraf paylaşım alanı düğün günü saat <strong className="text-white">19:00</strong>&apos;da otomatik açılacaktır.
+            </p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 border border-neutral-800 text-xs text-neutral-400 mt-2">
+              <Clock className="w-4 h-4 text-gold-400" />
+              <span>Düğün Tarihi: {weddingConfig.displayDate} - 19:00</span>
+            </div>
           </div>
-
-          {/* Guest Name & Message Inputs */}
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
-                Adınız Soyadınız (İsteğe Bağlı)
-              </label>
+        ) : (
+          /* TIME STAGE 2 & 3: AFTER 19:00 (UPLOAD FORM ACTIVE) */
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            {/* File Picker Area */}
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              className="border-2 border-dashed border-gold-400/40 hover:border-gold-400 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-black/40 hover:bg-black/60 group relative overflow-hidden"
+            >
               <input
-                type="text"
-                value={guestName}
-                onChange={(e) => setGuestName(e.target.value)}
-                placeholder="Örn: Ahmet & Zeynep"
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors"
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                className="hidden"
               />
-            </div>
 
-            <div>
-              <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
-                Mesajınız / Dileğiniz
-              </label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Örn: Size ömür boyu mutluluklar dileriz! ❤️"
-                rows={3}
-                className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors resize-none"
-              />
-            </div>
-          </div>
-
-          {/* Error Notice */}
-          <AnimatePresence>
-            {errorMsg && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="flex items-center gap-2 p-3 rounded-xl bg-red-950/60 border border-red-800/60 text-red-200 text-xs"
-              >
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                <span>{errorMsg}</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Success Banner */}
-          <AnimatePresence>
-            {isSuccess && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center gap-3 p-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-sm"
-              >
-                <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 animate-bounce" />
-                <div>
-                  <p className="font-semibold text-emerald-300">Harika! Anınız Paylaşıldı</p>
-                  <p className="text-xs text-emerald-200/80">Fotoğrafınız ve mesajınız dijital anı albümüne kaydedildi.</p>
+              {previewUrl ? (
+                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gold-500/40">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={previewUrl}
+                    alt="Önizleme"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs text-gold-300 font-medium bg-black/70 px-4 py-2 rounded-full border border-gold-400/50">
+                      Fotoğrafı Değiştir
+                    </span>
+                  </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-4">
+                  <div className="p-4 rounded-full bg-gold-500/10 border border-gold-400/30 text-gold-400 mb-3 group-hover:scale-110 transition-transform">
+                    <UploadCloud className="w-8 h-8" />
+                  </div>
+                  <p className="text-sm font-medium text-neutral-200">
+                    Fotoğrafınızı Seçin veya Sürükleyip Bırakın
+                  </p>
+                  <p className="text-xs text-neutral-400 mt-1">
+                    (Telefon galerisinden seçebilir veya anlık çekebilirsiniz)
+                  </p>
+                </div>
+              )}
+            </div>
 
-          {/* Upload Progress Bar */}
-          {isUploading && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-gold-300">
-                <span>Fotoğraf Yükleniyor...</span>
-                <span>%{uploadProgress}</span>
+            {/* Inputs */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
+                  Adınız Soyadınız (İsteğe Bağlı)
+                </label>
+                <input
+                  type="text"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  placeholder="Örn: Ahmet & Zeynep"
+                  className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors"
+                />
               </div>
-              <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
-                <div
-                  className="h-full bg-gold-gradient transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
+                  Mesajınız / Dileğiniz
+                </label>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Örn: Size ömür boyu mutluluklar dileriz! ❤️"
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors resize-none"
                 />
               </div>
             </div>
-          )}
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isUploading || !selectedFile}
-            className="w-full py-4 rounded-xl bg-gold-gradient text-black font-semibold text-sm flex items-center justify-center gap-2 shadow-gold-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
-          >
-            {isUploading ? (
-              <span className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                Yükleniyor...
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <ImageIcon className="w-4 h-4" />
-                Anıyı &amp; Fotoğrafı Gönder
-              </span>
+            {/* Notice for State 2 (19:00 - 00:00) */}
+            {!isRevealOpen && (
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-gold-950/40 border border-gold-500/30 text-gold-200 text-xs">
+                <EyeOff className="w-4 h-4 text-gold-400 shrink-0" />
+                <span>
+                  <strong>Gizli Moderasyon Modu:</strong> Yüklediğiniz fotoğraflar saat <strong className="text-white">00:00&apos;da</strong> canlı anı albümünde tüm misafirlere açılacaktır.
+                </span>
+              </div>
             )}
-          </button>
-        </form>
+
+            {/* Error Notice */}
+            <AnimatePresence>
+              {errorMsg && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex items-center gap-2 p-3 rounded-xl bg-red-950/60 border border-red-800/60 text-red-200 text-xs"
+                >
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>{errorMsg}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Success Banner */}
+            <AnimatePresence>
+              {isSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-3 p-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-sm"
+                >
+                  <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 animate-bounce" />
+                  <div>
+                    <p className="font-semibold text-emerald-300">Harika! Fotoğrafınız Alındı</p>
+                    <p className="text-xs text-emerald-200/80">Fotoğrafınız kaydedildi. Gece 00:00&apos;da anı albümünde yayınlanacaktır.</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Progress Bar */}
+            {isUploading && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs text-gold-300">
+                  <span>Fotoğraf Yükleniyor...</span>
+                  <span>%{uploadProgress}</span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
+                  <div
+                    className="h-full bg-gold-gradient transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isUploading || !selectedFile}
+              className="w-full py-4 rounded-xl bg-gold-gradient text-black font-semibold text-sm flex items-center justify-center gap-2 shadow-gold-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
+            >
+              {isUploading ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                  Yükleniyor...
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  Anıyı &amp; Fotoğrafı Gönder
+                </span>
+              )}
+            </button>
+          </form>
+        )}
       </motion.div>
 
-      {/* ========== KVKK CONSENT MODAL ========== */}
+      {/* TIME STAGE 3: AFTER 00:00 MIDNIGHT (AUTOMATIC PUBLIC LIVE STREAM REVEAL) */}
+      {isRevealOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-8"
+        >
+          <div className="text-center">
+            <span className="text-xs uppercase tracking-[0.3em] text-gold-400 font-medium flex items-center justify-center gap-2">
+              <Camera className="w-4 h-4" /> Düğün Anı Duvarı
+            </span>
+            <h3 className="font-serif text-2xl sm:text-4xl text-neutral-100 font-light mt-2">
+              Misafirlerimizden Gelen Kareler ❤️
+            </h3>
+            <p className="text-xs text-neutral-400 mt-1">
+              Fotoğrafların üzerine tıklayarak büyük boyutta görüntüleyebilirsiniz
+            </p>
+          </div>
+
+          {uploadedPhotos.length === 0 ? (
+            <div className="text-center py-12 text-neutral-400 glass-card max-w-md mx-auto p-6">
+              <ImageIcon className="w-10 h-10 text-gold-400/50 mx-auto mb-2" />
+              <p className="text-sm">Henüz yüklenmiş fotoğraf bulunmuyor.</p>
+              <p className="text-xs text-neutral-500 mt-1">Fotoğraflarınızı yukarıdaki alandan yükleyebilirsiniz!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              {uploadedPhotos.map((photo) => (
+                <motion.div
+                  key={photo.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={() => setActiveLightboxPhoto(photo)}
+                  className="group relative rounded-2xl overflow-hidden glass-card-gold border-gold-500/20 hover:border-gold-400/60 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                >
+                  <div className="relative h-60 w-full overflow-hidden bg-black/60">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo.photo_url}
+                      alt={photo.guest_name || 'Misafir fotoğrafı'}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="p-3 rounded-full bg-black/70 border border-gold-400/60 text-gold-300">
+                        <ZoomIn className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {(photo.guest_name || photo.message) && (
+                    <div className="p-4 border-t border-gold-500/20 bg-black/40">
+                      {photo.guest_name && (
+                        <p className="font-semibold text-sm text-gold-300 flex items-center gap-1.5">
+                          <Heart className="w-3.5 h-3.5 fill-gold-400 text-gold-400 shrink-0" />
+                          {photo.guest_name}
+                        </p>
+                      )}
+                      {photo.message && (
+                        <p className="text-xs text-neutral-300 italic mt-1 line-clamp-2">
+                          &quot;{photo.message}&quot;
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {/* FULL-SCREEN LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {activeLightboxPhoto && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveLightboxPhoto(null)}
+            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center rounded-2xl bg-neutral-950 border border-gold-400/30 overflow-hidden shadow-2xl"
+            >
+              <button
+                onClick={() => setActiveLightboxPhoto(null)}
+                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/70 border border-gold-400/40 text-neutral-200 hover:text-gold-400 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="relative w-full h-[65vh] bg-black flex items-center justify-center overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeLightboxPhoto.photo_url}
+                  alt={activeLightboxPhoto.guest_name || 'Büyütülmüş Görsel'}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+
+              <div className="w-full p-5 bg-gradient-to-t from-black to-neutral-950 border-t border-neutral-800 text-center">
+                {activeLightboxPhoto.guest_name && (
+                  <p className="font-serif text-lg text-gold-300 font-medium">
+                    {activeLightboxPhoto.guest_name}
+                  </p>
+                )}
+                {activeLightboxPhoto.message && (
+                  <p className="text-sm text-neutral-300 italic mt-1">
+                    &quot;{activeLightboxPhoto.message}&quot;
+                  </p>
+                )}
+                <p className="text-[10px] text-neutral-500 mt-2 uppercase tracking-widest">
+                  {new Date(activeLightboxPhoto.created_at).toLocaleDateString('tr-TR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* KVKK CONSENT MODAL */}
       <AnimatePresence>
         {showConsentModal && (
           <motion.div
@@ -418,7 +632,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl border border-gold-400/30 bg-gradient-to-b from-neutral-900 to-black shadow-2xl overflow-hidden"
             >
-              {/* Modal Header */}
               <div className="flex items-center justify-between p-5 border-b border-neutral-800">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-full bg-gold-500/10 border border-gold-400/30">
@@ -441,7 +654,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                 </button>
               </div>
 
-              {/* Consent Text */}
               <div className="flex-1 overflow-y-auto p-5">
                 <div className="flex items-center gap-2 text-gold-400 mb-3">
                   <ScrollText className="w-4 h-4" />
@@ -452,7 +664,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   {KVKK_CONSENT_TEXT}
                 </div>
 
-                {/* Consent Name Input */}
                 <div className="mt-5">
                   <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
                     Adınız Soyadınız <span className="text-red-400">*</span>
@@ -467,7 +678,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   />
                 </div>
 
-                {/* Consent Checkbox */}
                 <label className="flex items-start gap-3 mt-5 cursor-pointer group">
                   <div className="relative mt-0.5">
                     <input
@@ -489,7 +699,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   </span>
                 </label>
 
-                {/* Consent Error */}
                 <AnimatePresence>
                   {consentError && (
                     <motion.div
@@ -505,7 +714,6 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                 </AnimatePresence>
               </div>
 
-              {/* Modal Buttons */}
               <div className="p-5 border-t border-neutral-800 flex flex-col gap-3 sm:flex-row sm:justify-end">
                 <button
                   onClick={() => setShowConsentModal(false)}

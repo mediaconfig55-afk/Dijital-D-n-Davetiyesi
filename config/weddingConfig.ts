@@ -20,6 +20,11 @@ export interface BankAccount {
   logoText?: string;
 }
 
+export interface ParentInfo {
+  mother: string;
+  father: string;
+}
+
 export interface WeddingConfig {
   brideName: string;
   groomName: string;
@@ -29,6 +34,10 @@ export interface WeddingConfig {
   displayTime: string;
   slogan: string;
   invitationText: string;
+  parents: {
+    groom: ParentInfo;
+    bride: ParentInfo;
+  };
   venue: {
     name: string;
     address: string;
@@ -64,6 +73,16 @@ export const weddingConfig: WeddingConfig = {
   photoRevealTime: "2026-07-30T23:59:59",
   slogan: "Bu güzel günümüzde sizleri de aramızda görmekten mutluluk duyarız!",
   invitationText: "Düğünümüze hoş geldiniz! Mutluluğumuza ortak olmanız bizleri onurlandıracaktır.",
+  parents: {
+    groom: {
+      father: "Ahmet Yılmaz",
+      mother: "Ayşe Yılmaz",
+    },
+    bride: {
+      father: "Mehmet Demir",
+      mother: "Fatma Demir",
+    },
+  },
   venue: {
     name: "Güneş Düğün Salonu",
     address: "19 Mayıs, Fuar Cd. No:14, 55020 İlkadım / Samsun",

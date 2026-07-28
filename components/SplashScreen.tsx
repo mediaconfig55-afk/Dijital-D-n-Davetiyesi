@@ -3,17 +3,42 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { weddingConfig } from '@/config/weddingConfig';
-import { Sparkles, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 interface SplashScreenProps {
   onComplete: () => void;
 }
 
+// Petal shapes for canvas
+interface Petal {
+  x: number;
+  y: number;
+  size: number;
+  rotation: number;
+  rotationSpeed: number;
+  speedY: number;
+  speedX: number;
+  opacity: number;
+  color: string;
+  swayAmplitude: number;
+  swaySpeed: number;
+  startTime: number;
+}
+
+const PETAL_COLORS = [
+  'rgba(212, 160, 160, 0.6)',  // Rose pink
+  'rgba(232, 195, 195, 0.5)',  // Light pink
+  'rgba(201, 169, 110, 0.4)',  // Warm gold
+  'rgba(122, 158, 126, 0.35)', // Sage green
+  'rgba(245, 224, 224, 0.5)',  // Blush
+  'rgba(180, 140, 140, 0.4)',  // Dusty rose
+];
+
 export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
-  const [step, setStep] = useState<'question' | 'curtain' | 'completed'>('question');
+  const [step, setStep] = useState<'entrance' | 'names' | 'curtain' | 'completed'>('entrance');
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Canvas Golden Particle Animation
+  // Canvas Petal Animation
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -32,42 +57,70 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Particle pool
-    const particleCount = 45;
-    const particles = Array.from({ length: particleCount }).map(() => ({
+    const petalCount = 35;
+    const petals: Petal[] = Array.from({ length: petalCount }).map(() => ({
       x: Math.random() * width,
-      y: Math.random() * height,
-      radius: Math.random() * 2.2 + 0.5,
-      alpha: Math.random() * 0.7 + 0.2,
-      speedY: -(Math.random() * 0.4 + 0.1),
-      speedX: (Math.random() - 0.5) * 0.3,
-      pulse: Math.random() * 0.02 + 0.005,
+      y: Math.random() * height * -1,
+      size: Math.random() * 12 + 6,
+      rotation: Math.random() * 360,
+      rotationSpeed: (Math.random() - 0.5) * 2,
+      speedY: Math.random() * 1.2 + 0.3,
+      speedX: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random() * 0.5 + 0.3,
+      color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+      swayAmplitude: Math.random() * 30 + 10,
+      swaySpeed: Math.random() * 0.02 + 0.005,
+      startTime: Math.random() * 1000,
     }));
+
+    const drawPetal = (p: Petal) => {
+      ctx.save();
+      const swayX = Math.sin(Date.now() * p.swaySpeed + p.startTime) * p.swayAmplitude;
+      ctx.translate(p.x + swayX, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.globalAlpha = p.opacity;
+
+      // Draw petal shape
+      ctx.beginPath();
+      ctx.moveTo(0, -p.size / 2);
+      ctx.bezierCurveTo(
+        p.size / 2, -p.size / 3,
+        p.size / 2, p.size / 3,
+        0, p.size / 2
+      );
+      ctx.bezierCurveTo(
+        -p.size / 2, p.size / 3,
+        -p.size / 2, -p.size / 3,
+        0, -p.size / 2
+      );
+      ctx.fillStyle = p.color;
+      ctx.fill();
+
+      // Subtle vein
+      ctx.beginPath();
+      ctx.moveTo(0, -p.size / 2.5);
+      ctx.lineTo(0, p.size / 2.5);
+      ctx.strokeStyle = `rgba(255, 255, 255, 0.15)`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+
+      ctx.restore();
+    };
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      particles.forEach((p) => {
+      petals.forEach((p) => {
         p.y += p.speedY;
         p.x += p.speedX;
-        p.alpha += Math.sin(Date.now() * p.pulse) * 0.01;
+        p.rotation += p.rotationSpeed;
 
-        if (p.y < -10) {
-          p.y = height + 10;
-          p.x = Math.random() * width;
-        }
-        if (p.x < -10 || p.x > width + 10) {
+        if (p.y > height + 20) {
+          p.y = -20;
           p.x = Math.random() * width;
         }
 
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 175, 55, ${Math.max(0.1, Math.min(0.8, p.alpha))})`;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#D4AF37';
-        ctx.fill();
-        ctx.restore();
+        drawPetal(p);
       });
 
       animationFrameId = requestAnimationFrame(render);
@@ -81,78 +134,213 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
     };
   }, []);
 
-  // Intro Sequence Timings:
-  // 0s - 2.5s: Question text
-  // 2.5s: Question fades out & curtain animation begins
+  // Intro Sequence Timings
   useEffect(() => {
-    const timer1 = setTimeout(() => {
-      setStep('curtain');
-    }, 2500);
-
-    const timer2 = setTimeout(() => {
+    const timer1 = setTimeout(() => setStep('names'), 2800);
+    const timer2 = setTimeout(() => setStep('curtain'), 5000);
+    const timer3 = setTimeout(() => {
       setStep('completed');
       onComplete();
-    }, 4200);
+    }, 6500);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
     };
   }, [onComplete]);
 
   if (step === 'completed') return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black select-none pointer-events-auto">
-      {/* Background Particle Canvas */}
+    <div className="fixed inset-0 z-50 overflow-hidden bg-[#FFFDF8] select-none pointer-events-auto">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A96E' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* Falling Petal Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" />
 
-      {/* Step 1: Initial Question Text */}
+      {/* Soft Gradient Overlays */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-rose-300/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-72 h-72 bg-sage-300/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-20 left-10 w-56 h-56 bg-gold-400/8 rounded-full blur-[80px] pointer-events-none" />
+
+      {/* Step 1: Entrance - Beautiful Question */}
       <AnimatePresence mode="wait">
-        {step === 'question' && (
+        {step === 'entrance' && (
           <motion.div
-            key="question-box"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05, transition: { duration: 0.8, ease: 'easeInOut' } }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
+            key="entrance-box"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.8, ease: 'easeInOut' } }}
             className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 text-center"
           >
+            {/* Decorative Line Top */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 1.2, ease: 'easeOut' }}
+              className="w-32 h-[1px] bg-gradient-to-r from-transparent via-gold-400/60 to-transparent mb-8"
+            />
+
+            {/* Floral Ornament */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ delay: 0.3, duration: 1 }}
+              className="text-3xl mb-6 text-rose-300"
+            >
+              ✿
+            </motion.div>
+
+            {/* Label */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 1 }}
-              className="flex items-center gap-2 text-gold-400 mb-6 tracking-widest text-xs uppercase"
+              transition={{ delay: 0.5, duration: 1 }}
+              className="flex items-center gap-3 text-gold-500 mb-6 tracking-[0.3em] text-xs uppercase font-medium"
             >
-              <Sparkles className="w-4 h-4 text-gold-400 animate-pulse" />
+              <span className="w-6 h-[1px] bg-gold-400/60" />
               <span>Özel Bir Davet</span>
-              <Sparkles className="w-4 h-4 text-gold-400 animate-pulse" />
+              <span className="w-6 h-[1px] bg-gold-400/60" />
             </motion.div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl text-gold-gradient font-light leading-relaxed max-w-2xl">
-              Bir Hikayeye Tanıklık Etmeye Hazır mısınız?
-            </h1>
+            {/* Main Question */}
+            <motion.h1
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 1.2, ease: 'easeOut' }}
+              className="font-serif text-3xl sm:text-5xl md:text-6xl text-warm-700 font-light leading-relaxed max-w-2xl"
+            >
+              Bir Hikayeye Tanıklık Etmeye
+              <br />
+              <span className="text-gold-gradient font-normal">Hazır mısınız?</span>
+            </motion.h1>
 
+            {/* Bottom Ornament */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ delay: 0.6, duration: 1 }}
-              className="w-24 h-[1px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mt-8"
+              transition={{ delay: 1, duration: 1 }}
+              className="w-24 h-[1px] bg-gradient-to-r from-transparent via-rose-300/60 to-transparent mt-8"
             />
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.3, duration: 1 }}
+              className="text-2xl mt-4 text-gold-400/40"
+            >
+              ❀
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Step 2: Elegant Dual Curtain Opening Animation */}
+      {/* Step 2: Names Reveal with Floral Frame */}
+      <AnimatePresence>
+        {step === 'names' && (
+          <motion.div
+            key="names-reveal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.6 } }}
+            className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6 pointer-events-none"
+          >
+            {/* Floral Frame Container */}
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1.2, ease: 'easeOut' }}
+              className="relative flex flex-col items-center"
+            >
+              {/* Top Ornament */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="text-4xl sm:text-5xl text-rose-300/60 mb-4"
+              >
+                ❀ ✿ ❀
+              </motion.div>
+
+              {/* Gold Line */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="w-40 h-[1px] bg-gradient-to-r from-transparent via-gold-400 to-transparent mb-6"
+              />
+
+              {/* Names */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 1 }}
+                className="flex flex-col items-center gap-1"
+              >
+                <span className="font-script text-5xl sm:text-7xl text-warm-700 tracking-wide">
+                  {weddingConfig.groomName}
+                </span>
+                <div className="flex items-center gap-4 my-2">
+                  <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-gold-400/50" />
+                  <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-rose-300 fill-rose-200/50" />
+                  <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-gold-400/50" />
+                </div>
+                <span className="font-script text-5xl sm:text-7xl text-warm-700 tracking-wide">
+                  {weddingConfig.brideName}
+                </span>
+              </motion.div>
+
+              {/* Date */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9, duration: 0.8 }}
+                className="mt-6 text-sm tracking-[0.25em] uppercase text-gold-500 font-medium"
+              >
+                {weddingConfig.displayDate}
+              </motion.p>
+
+              {/* Bottom ornament */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 1, duration: 0.8 }}
+                className="w-40 h-[1px] bg-gradient-to-r from-transparent via-gold-400 to-transparent mt-6"
+              />
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1, duration: 0.8 }}
+                className="text-3xl sm:text-4xl text-rose-300/50 mt-4"
+              >
+                ✿
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Step 3: Elegant Dual Curtain Opening */}
       <div className="absolute inset-0 z-10 flex pointer-events-none">
         {/* Left Curtain */}
         <motion.div
           initial={{ x: 0 }}
           animate={{ x: step === 'curtain' ? '-100%' : '0%' }}
           transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }}
-          className="w-1/2 h-full bg-gradient-to-r from-[#070707] via-[#0d0c0a] to-[#17140e] border-r border-gold-500/20 shadow-2xl relative"
+          className="w-1/2 h-full relative"
+          style={{
+            background: 'linear-gradient(to right, #FFFDF8, #FFF9F0, #F5F0E8)',
+            borderRight: '1px solid rgba(201, 169, 110, 0.15)',
+          }}
         >
-          <div className="absolute inset-0 bg-gold-glow opacity-30 pointer-events-none" />
+          <div className="absolute inset-0 bg-rose-glow opacity-20 pointer-events-none" />
         </motion.div>
 
         {/* Right Curtain */}
@@ -160,32 +348,15 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           initial={{ x: 0 }}
           animate={{ x: step === 'curtain' ? '100%' : '0%' }}
           transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }}
-          className="w-1/2 h-full bg-gradient-to-l from-[#070707] via-[#0d0c0a] to-[#17140e] border-l border-gold-500/20 shadow-2xl relative"
+          className="w-1/2 h-full relative"
+          style={{
+            background: 'linear-gradient(to left, #FFFDF8, #FFF9F0, #F5F0E8)',
+            borderLeft: '1px solid rgba(201, 169, 110, 0.15)',
+          }}
         >
-          <div className="absolute inset-0 bg-gold-glow opacity-30 pointer-events-none" />
+          <div className="absolute inset-0 bg-rose-glow opacity-20 pointer-events-none" />
         </motion.div>
       </div>
-
-      {/* Names Revealed in Center when Curtain Splits */}
-      {step === 'curtain' && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 pointer-events-none"
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <span className="font-serif text-3xl sm:text-5xl text-gold-gradient tracking-wide">
-              {weddingConfig.groomName}
-            </span>
-            <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-gold-400 fill-gold-400/30 animate-bounce" />
-            <span className="font-serif text-3xl sm:text-5xl text-gold-gradient tracking-wide">
-              {weddingConfig.brideName}
-            </span>
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 };

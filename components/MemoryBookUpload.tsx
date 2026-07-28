@@ -293,36 +293,36 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="glass-card-gold p-6 sm:p-10 relative overflow-hidden"
+        className="glass-card-gold p-6 sm:p-10 relative overflow-hidden shadow-card"
       >
         {/* Title */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 text-gold-400 mb-2">
-            <Heart className="w-5 h-5 fill-gold-400" />
-            <Sparkles className="w-4 h-4" />
+          <div className="flex items-center justify-center gap-2 text-rose-400 mb-2">
+            <Heart className="w-5 h-5 fill-rose-300/40" />
+            <Sparkles className="w-4 h-4 text-gold-500" />
           </div>
-          <h2 className="font-serif text-2xl sm:text-4xl text-gold-gradient font-light">
+          <h2 className="font-serif text-2xl sm:text-4xl text-warm-700 font-light">
             Bugünden Bir Kare ve Bir Hatıra Bırakın ❤️
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-300 mt-2">
+          <p className="text-xs sm:text-sm text-warm-500 mt-2">
             Bu özel günden çektiğiniz fotoğrafları ve güzel dileklerinizi dijital anı albümümüze ekleyin.
           </p>
         </div>
 
         {/* TIME STAGE 1: BEFORE 19:00 (LOCKED) */}
         {!isUploadOpen ? (
-          <div className="text-center p-8 sm:p-12 rounded-2xl bg-black/50 border border-gold-500/30 space-y-4">
-            <div className="w-16 h-16 rounded-full bg-gold-500/10 border border-gold-400/40 flex items-center justify-center mx-auto text-gold-400 animate-pulse">
+          <div className="text-center p-8 sm:p-12 rounded-2xl bg-white/70 border border-gold-200/40 space-y-4 shadow-soft">
+            <div className="w-16 h-16 rounded-full bg-gold-400/10 border border-gold-400/30 flex items-center justify-center mx-auto text-gold-500 animate-pulse">
               <Lock className="w-8 h-8" />
             </div>
-            <h3 className="font-serif text-xl sm:text-2xl text-neutral-100 font-light">
+            <h3 className="font-serif text-xl sm:text-2xl text-warm-700 font-light">
               Fotoğraf Yükleme Henüz Açılmadı
             </h3>
-            <p className="text-sm text-gold-300 font-medium">
-              📷 Fotoğraf paylaşım alanı düğün günü saat <strong className="text-white">19:00</strong>&apos;da otomatik açılacaktır.
+            <p className="text-sm text-gold-600 font-medium">
+              📷 Fotoğraf paylaşım alanı düğün günü saat <strong className="text-warm-800">19:00</strong>&apos;da otomatik açılacaktır.
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 border border-neutral-800 text-xs text-neutral-400 mt-2">
-              <Clock className="w-4 h-4 text-gold-400" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-100 border border-gold-200/40 text-xs text-warm-600 mt-2">
+              <Clock className="w-4 h-4 text-gold-500" />
               <span>Düğün Tarihi: {weddingConfig.displayDate} - 19:00</span>
             </div>
           </div>
@@ -334,7 +334,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
               onClick={() => fileInputRef.current?.click()}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              className="border-2 border-dashed border-gold-400/40 hover:border-gold-400 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-black/40 hover:bg-black/60 group relative overflow-hidden"
+              className="border-2 border-dashed border-gold-300/60 hover:border-gold-500 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-white/60 hover:bg-white/90 group relative overflow-hidden shadow-soft"
             >
               <input
                 type="file"
@@ -345,28 +345,28 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
               />
 
               {previewUrl ? (
-                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gold-500/40">
+                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gold-300/40">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={previewUrl}
                     alt="Önizleme"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-xs text-gold-300 font-medium bg-black/70 px-4 py-2 rounded-full border border-gold-400/50">
+                  <div className="absolute inset-0 bg-warm-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs text-white font-medium bg-warm-800/80 px-4 py-2 rounded-full border border-gold-300/40">
                       Fotoğrafı Değiştir
                     </span>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-4">
-                  <div className="p-4 rounded-full bg-gold-500/10 border border-gold-400/30 text-gold-400 mb-3 group-hover:scale-110 transition-transform">
+                  <div className="p-4 rounded-full bg-gold-400/10 border border-gold-200/40 text-gold-500 mb-3 group-hover:scale-110 transition-transform">
                     <UploadCloud className="w-8 h-8" />
                   </div>
-                  <p className="text-sm font-medium text-neutral-200">
+                  <p className="text-sm font-medium text-warm-700">
                     Fotoğrafınızı Seçin veya Sürükleyip Bırakın
                   </p>
-                  <p className="text-xs text-neutral-400 mt-1">
+                  <p className="text-xs text-warm-400 mt-1">
                     (Telefon galerisinden seçebilir veya anlık çekebilirsiniz)
                   </p>
                 </div>
@@ -376,7 +376,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             {/* Inputs */}
             <div className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
+                <label className="block text-xs uppercase tracking-wider text-warm-500 mb-1.5 font-medium">
                   Adınız Soyadınız (İsteğe Bağlı)
                 </label>
                 <input
@@ -384,12 +384,12 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="Örn: Ahmet & Zeynep"
-                  className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-white/70 border border-gold-200/50 focus:border-gold-500 text-warm-700 text-sm focus:outline-none transition-colors placeholder:text-warm-300"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
+                <label className="block text-xs uppercase tracking-wider text-warm-500 mb-1.5 font-medium">
                   Mesajınız / Dileğiniz
                 </label>
                 <textarea
@@ -397,7 +397,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Örn: Size ömür boyu mutluluklar dileriz! ❤️"
                   rows={3}
-                  className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/70 border border-gold-200/50 focus:border-gold-500 text-warm-700 text-sm focus:outline-none transition-colors resize-none placeholder:text-warm-300"
                 />
               </div>
             </div>

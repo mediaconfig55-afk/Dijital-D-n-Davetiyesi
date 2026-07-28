@@ -26,7 +26,7 @@ export default function Home() {
   // If after-wedding mode is activated in config, show PostWeddingView directly
   if (weddingConfig.isPostWeddingMode) {
     return (
-      <main className="min-h-screen bg-[#070707] text-[#fcfbf7]">
+      <main className="min-h-screen bg-[#FFFDF8] text-[#3D2B1F]">
         <PostWeddingView />
         <Footer onOpenQR={() => setIsQROpen(true)} />
         <QRCodeModal isOpen={isQROpen} onClose={() => setIsQROpen(false)} />
@@ -35,7 +35,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#070707] text-[#fcfbf7] relative overflow-hidden select-none">
+    <main className="min-h-screen bg-[#FFFDF8] text-[#3D2B1F] relative overflow-hidden select-none">
       {/* 1. Cinematic Opening Splash & Curtain Experience */}
       {!isSplashComplete && (
         <SplashScreen onComplete={() => setIsSplashComplete(true)} />

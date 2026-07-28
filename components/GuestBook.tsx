@@ -25,7 +25,6 @@ export const GuestBook: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Fetch messages from Supabase on mount if configured
   useEffect(() => {
     if (!isSupabaseConfigured) return;
 
@@ -98,7 +97,7 @@ export const GuestBook: React.FC = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-xs uppercase tracking-[0.3em] text-gold-400 font-medium flex items-center justify-center gap-2"
+          className="text-xs uppercase tracking-[0.3em] text-gold-500 font-medium flex items-center justify-center gap-2"
         >
           <MessageSquare className="w-4 h-4" /> Anı Defteri
         </motion.span>
@@ -107,14 +106,18 @@ export const GuestBook: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-serif text-3xl sm:text-5xl text-gold-gradient font-light mt-2"
+          className="font-serif text-3xl sm:text-5xl text-warm-700 font-light mt-2"
         >
           Mesaj Defterimiz
         </motion.h2>
-        <p className="text-xs sm:text-sm text-neutral-300 mt-2">
+        <p className="text-xs sm:text-sm text-warm-400 mt-2">
           Bizim için bir tebrik mesajı veya güzel bir temenni bırakın.
         </p>
-        <div className="w-16 h-[1px] bg-gold-500/40 mx-auto mt-4" />
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-gold-400/50" />
+          <span className="text-rose-300/50 text-sm">✿</span>
+          <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-gold-400/50" />
+        </div>
       </div>
 
       {/* Message Input Form */}
@@ -127,7 +130,7 @@ export const GuestBook: React.FC = () => {
       >
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1 font-medium">
+            <label className="block text-xs uppercase tracking-wider text-warm-400 mb-1 font-medium">
               İsminiz
             </label>
             <input
@@ -136,12 +139,12 @@ export const GuestBook: React.FC = () => {
               value={guestName}
               onChange={(e) => setGuestName(e.target.value)}
               placeholder="Adınız Soyadınız"
-              className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gold-200/40 focus:border-gold-400 text-warm-700 text-sm focus:outline-none transition-colors placeholder:text-warm-300"
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1 font-medium">
+            <label className="block text-xs uppercase tracking-wider text-warm-400 mb-1 font-medium">
               Mesajınız
             </label>
             <textarea
@@ -150,13 +153,13 @@ export const GuestBook: React.FC = () => {
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
               placeholder="Tebriklerinizi ve dileklerinizi buraya yazabilirsiniz..."
-              className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gold-200/40 focus:border-gold-400 text-warm-700 text-sm focus:outline-none transition-colors resize-none placeholder:text-warm-300"
             />
           </div>
 
           <div className="flex items-center justify-between pt-2">
             {isSuccess ? (
-              <span className="text-xs text-emerald-400 flex items-center gap-1.5 font-medium">
+              <span className="text-xs text-sage-500 flex items-center gap-1.5 font-medium">
                 <Sparkles className="w-4 h-4" /> Mesajınız kaydedildi, teşekkürler!
               </span>
             ) : (
@@ -166,7 +169,7 @@ export const GuestBook: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-3 rounded-full bg-gold-gradient text-black font-semibold text-sm flex items-center gap-2 shadow-gold-soft hover:scale-105 transition-all disabled:opacity-50 ml-auto"
+              className="px-6 py-3 rounded-full bg-gold-gradient text-white font-semibold text-sm flex items-center gap-2 shadow-gold-soft hover:scale-105 transition-all disabled:opacity-50 ml-auto"
             >
               <Send className="w-4 h-4" />
               Mesajı Gönder
@@ -185,19 +188,19 @@ export const GuestBook: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="glass-card p-5 border-neutral-800 hover:border-gold-500/30 transition-all flex items-start gap-4"
+              className="glass-card p-5 hover:shadow-card-hover transition-all flex items-start gap-4"
             >
-              <div className="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-400/30 flex items-center justify-center text-gold-400 shrink-0">
+              <div className="w-10 h-10 rounded-full bg-gold-400/10 border border-gold-200/30 flex items-center justify-center text-gold-500 shrink-0">
                 <User className="w-5 h-5" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-serif text-lg text-neutral-100 font-medium">
+                  <h4 className="font-serif text-lg text-warm-700 font-medium">
                     {item.guest_name}
                   </h4>
-                  <Heart className="w-4 h-4 text-gold-400/60" />
+                  <Heart className="w-4 h-4 text-rose-300/60" />
                 </div>
-                <p className="text-sm text-neutral-300 mt-1 leading-relaxed font-light">
+                <p className="text-sm text-warm-500 mt-1 leading-relaxed font-light">
                   {item.message}
                 </p>
               </div>

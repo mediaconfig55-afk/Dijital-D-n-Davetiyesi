@@ -69,12 +69,12 @@ export const CountdownTimer: React.FC = () => {
         <div className="absolute top-2 left-4 text-rose-300/20 text-lg">❀</div>
         <div className="absolute top-2 right-4 text-rose-300/20 text-lg">❀</div>
 
-        <div className="flex items-center justify-center gap-2 text-gold-500 text-xs uppercase tracking-[0.25em] mb-2 font-medium">
+        <div className="flex items-center justify-center gap-2 text-gold-700 text-xs uppercase tracking-[0.25em] mb-2 font-bold">
           <Clock className="w-4 h-4" />
           <span>Büyük Günü Beklerken</span>
         </div>
 
-        <h2 className="font-serif text-3xl sm:text-4xl text-warm-700 font-light mb-8">
+        <h2 className="font-serif text-3xl sm:text-4xl text-warm-900 font-semibold mb-8">
           Geri Sayım
         </h2>
 
@@ -87,12 +87,12 @@ export const CountdownTimer: React.FC = () => {
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/70 border border-gold-200/30 shadow-card backdrop-blur-sm"
+              className="flex flex-col items-center justify-center p-4 rounded-2xl bg-white border border-gold-300 shadow-soft"
             >
-              <span className="font-mono text-3xl sm:text-5xl font-bold text-gold-gradient tracking-tight">
+              <span className="font-mono text-3xl sm:text-5xl font-extrabold text-gold-gradient tracking-tight">
                 {isClient ? String(item.value).padStart(2, '0') : '00'}
               </span>
-              <span className="text-xs uppercase tracking-widest text-warm-400 mt-2 font-medium">
+              <span className="text-xs uppercase tracking-widest text-warm-700 mt-2 font-bold">
                 {item.label}
               </span>
             </motion.div>

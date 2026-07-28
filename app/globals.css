@@ -6,23 +6,24 @@
 
 :root {
   --background: #FFFDF8;
-  --foreground: #3D2B1F;
+  --foreground: #2A1D15;
   --font-cormorant: 'Cormorant Garamond', Georgia, serif;
   --font-great-vibes: 'Great Vibes', cursive;
   --font-inter: 'Plus Jakarta Sans', sans-serif;
   --font-playfair: 'Playfair Display', Georgia, serif;
-  --gold: #C9A96E;
-  --gold-dark: #8B6F47;
-  --rose: #D4A0A0;
-  --sage: #7A9E7E;
+  --gold: #B88E40;
+  --gold-dark: #7A5B2B;
+  --rose: #C88A8A;
+  --sage: #6B8E6F;
   --cream: #FFFDF8;
-  --warm-gray: #6B5B4E;
+  --warm-gray: #554438;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter);
+  font-weight: 500;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
 }
@@ -35,32 +36,35 @@ body {
   background: #F5F0E8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C9A96E;
+  background: #B88E40;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8B6F47;
+  background: #7A5B2B;
 }
 
 /* ═══════════════════════════════════════════
-   TYPOGRAPHY UTILITIES
+   TYPOGRAPHY UTILITIES (HIGHER WEIGHT & CONTRAST)
    ═══════════════════════════════════════════ */
 
 .text-gold-gradient {
-  background: linear-gradient(135deg, #C9A96E 0%, #8B6F47 60%, #C9A96E 100%);
+  background: linear-gradient(135deg, #B88E40 0%, #6E4F20 60%, #A37C32 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 600;
 }
 
 .text-gold-light {
-  background: linear-gradient(135deg, #D4C4A0 0%, #C9A96E 50%, #A68B5B 100%);
+  background: linear-gradient(135deg, #C2AB7A 0%, #A37C32 50%, #7A5B2B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 600;
 }
 
 .text-elegant {
-  color: #3D2B1F;
+  color: #2A1D15;
   font-family: var(--font-cormorant);
+  font-weight: 600;
 }
 
 /* ═══════════════════════════════════════════

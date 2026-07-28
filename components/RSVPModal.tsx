@@ -82,10 +82,10 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({ isOpen, onClose }) => {
           </button>
 
           <div className="text-center mb-6">
-            <h3 className="font-serif text-2xl sm:text-3xl text-warm-700 font-light">
+            <h3 className="font-serif text-2xl sm:text-3xl text-warm-900 font-semibold">
               Katılım Durumu (RSVP)
             </h3>
-            <p className="text-xs text-warm-400 mt-1">
+            <p className="text-xs text-warm-700 font-medium mt-1">
               Lütfen katılım durumunuzu bizimle paylaşın.
             </p>
           </div>
@@ -96,11 +96,11 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({ isOpen, onClose }) => {
               animate={{ scale: 1, opacity: 1 }}
               className="py-10 text-center space-y-3"
             >
-              <div className="w-16 h-16 rounded-full bg-gold-400/15 border border-gold-400/40 flex items-center justify-center text-gold-500 mx-auto">
-                <Check className="w-8 h-8" />
+              <div className="w-16 h-16 rounded-full bg-gold-100 border border-gold-400 flex items-center justify-center text-gold-700 mx-auto">
+                <Check className="w-8 h-8 font-bold" />
               </div>
-              <h4 className="font-serif text-2xl text-warm-700">Yanıtınız Alındı!</h4>
-              <p className="text-xs text-warm-400">
+              <h4 className="font-serif text-2xl text-warm-900 font-bold">Yanıtınız Alındı!</h4>
+              <p className="text-xs text-warm-700 font-medium">
                 Geri bildiriminiz için çok teşekkür ederiz.
               </p>
             </motion.div>
@@ -111,46 +111,46 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({ isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={() => setStatus('attending')}
-                  className={`p-3 rounded-xl border text-xs sm:text-sm font-medium flex flex-col items-center gap-1.5 transition-all ${
+                  className={`p-3 rounded-xl border text-xs sm:text-sm font-bold flex flex-col items-center gap-1.5 transition-all ${
                     status === 'attending'
-                      ? 'bg-gold-400/15 border-gold-400 text-gold-600 shadow-gold-soft'
-                      : 'bg-white/50 border-gold-200/30 text-warm-400 hover:border-gold-300/50'
+                      ? 'bg-gold-100 border-gold-500 text-gold-800 shadow-gold-soft'
+                      : 'bg-white border-gold-300 text-warm-700 hover:border-gold-400'
                   }`}
                 >
-                  <CheckCircle className={`w-5 h-5 ${status === 'attending' ? 'text-gold-500' : 'text-warm-300'}`} />
+                  <CheckCircle className={`w-5 h-5 ${status === 'attending' ? 'text-gold-700' : 'text-warm-400'}`} />
                   <span>Katılıyorum</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setStatus('declined')}
-                  className={`p-3 rounded-xl border text-xs sm:text-sm font-medium flex flex-col items-center gap-1.5 transition-all ${
+                  className={`p-3 rounded-xl border text-xs sm:text-sm font-bold flex flex-col items-center gap-1.5 transition-all ${
                     status === 'declined'
-                      ? 'bg-rose-100 border-rose-300 text-rose-500'
-                      : 'bg-white/50 border-gold-200/30 text-warm-400 hover:border-gold-300/50'
+                      ? 'bg-rose-100 border-rose-400 text-rose-700'
+                      : 'bg-white border-gold-300 text-warm-700 hover:border-gold-400'
                   }`}
                 >
-                  <XCircle className={`w-5 h-5 ${status === 'declined' ? 'text-rose-400' : 'text-warm-300'}`} />
+                  <XCircle className={`w-5 h-5 ${status === 'declined' ? 'text-rose-600' : 'text-warm-400'}`} />
                   <span>Katılamıyorum</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setStatus('maybe')}
-                  className={`p-3 rounded-xl border text-xs sm:text-sm font-medium flex flex-col items-center gap-1.5 transition-all ${
+                  className={`p-3 rounded-xl border text-xs sm:text-sm font-bold flex flex-col items-center gap-1.5 transition-all ${
                     status === 'maybe'
-                      ? 'bg-amber-50 border-amber-300 text-amber-600'
-                      : 'bg-white/50 border-gold-200/30 text-warm-400 hover:border-gold-300/50'
+                      ? 'bg-amber-100 border-amber-400 text-amber-800'
+                      : 'bg-white border-gold-300 text-warm-700 hover:border-gold-400'
                   }`}
                 >
-                  <HelpCircle className={`w-5 h-5 ${status === 'maybe' ? 'text-amber-500' : 'text-warm-300'}`} />
+                  <HelpCircle className={`w-5 h-5 ${status === 'maybe' ? 'text-amber-600' : 'text-warm-400'}`} />
                   <span>Emin Değilim</span>
                 </button>
               </div>
 
               {/* Guest Name */}
               <div>
-                <label className="block text-xs uppercase tracking-wider text-warm-400 mb-1 font-medium">
+                <label className="block text-xs uppercase tracking-wider text-warm-800 mb-1 font-bold">
                   Adınız Soyadınız *
                 </label>
                 <input
@@ -159,7 +159,7 @@ export const RSVPModal: React.FC<RSVPModalProps> = ({ isOpen, onClose }) => {
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="Ahmet Yılmaz"
-                  className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gold-200/40 focus:border-gold-400 text-warm-700 text-sm focus:outline-none transition-colors placeholder:text-warm-300"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-gold-300 focus:border-gold-500 text-warm-900 font-semibold text-sm focus:outline-none transition-colors placeholder:text-warm-400"
                 />
               </div>
 

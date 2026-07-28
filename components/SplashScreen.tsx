@@ -202,11 +202,11 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="flex items-center gap-3 text-gold-500 mb-6 tracking-[0.3em] text-xs uppercase font-medium"
+              className="flex items-center gap-3 text-gold-700 mb-6 tracking-[0.3em] text-xs uppercase font-bold"
             >
-              <span className="w-6 h-[1px] bg-gold-400/60" />
+              <span className="w-6 h-[1px] bg-gold-500" />
               <span>Özel Bir Davet</span>
-              <span className="w-6 h-[1px] bg-gold-400/60" />
+              <span className="w-6 h-[1px] bg-gold-500" />
             </motion.div>
 
             {/* Main Question */}
@@ -214,11 +214,11 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 1.2, ease: 'easeOut' }}
-              className="font-serif text-3xl sm:text-5xl md:text-6xl text-warm-700 font-light leading-relaxed max-w-2xl"
+              className="font-serif text-3xl sm:text-5xl md:text-6xl text-warm-900 font-normal leading-relaxed max-w-2xl"
             >
               Bir Hikayeye Tanıklık Etmeye
               <br />
-              <span className="text-gold-gradient font-normal">Hazır mısınız?</span>
+              <span className="text-gold-gradient font-bold">Hazır mısınız?</span>
             </motion.h1>
 
             {/* Bottom Ornament */}
@@ -226,14 +226,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ delay: 1, duration: 1 }}
-              className="w-24 h-[1px] bg-gradient-to-r from-transparent via-rose-300/60 to-transparent mt-8"
+              className="w-24 h-[1px] bg-gradient-to-r from-transparent via-rose-400 to-transparent mt-8"
             />
 
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.3, duration: 1 }}
-              className="text-2xl mt-4 text-gold-400/40"
+              className="text-2xl mt-4 text-gold-600"
             >
               ❀
             </motion.div>
@@ -263,7 +263,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-4xl sm:text-5xl text-rose-300/60 mb-4"
+                className="text-4xl sm:text-5xl text-rose-400 mb-4"
               >
                 ❀ ✿ ❀
               </motion.div>
@@ -273,7 +273,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="w-40 h-[1px] bg-gradient-to-r from-transparent via-gold-400 to-transparent mb-6"
+                className="w-40 h-[1px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mb-6"
               />
 
               {/* Names */}
@@ -283,15 +283,15 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
                 transition={{ delay: 0.5, duration: 1 }}
                 className="flex flex-col items-center gap-1"
               >
-                <span className="font-script text-5xl sm:text-7xl text-warm-700 tracking-wide">
+                <span className="font-script text-6xl sm:text-7xl text-warm-900 font-semibold tracking-wide">
                   {weddingConfig.groomName}
                 </span>
                 <div className="flex items-center gap-4 my-2">
-                  <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-gold-400/50" />
-                  <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-rose-300 fill-rose-200/50" />
-                  <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-gold-400/50" />
+                  <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-gold-500" />
+                  <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400 fill-rose-300" />
+                  <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-gold-500" />
                 </div>
-                <span className="font-script text-5xl sm:text-7xl text-warm-700 tracking-wide">
+                <span className="font-script text-6xl sm:text-7xl text-warm-900 font-semibold tracking-wide">
                   {weddingConfig.brideName}
                 </span>
               </motion.div>
@@ -301,7 +301,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.9, duration: 0.8 }}
-                className="mt-6 text-sm tracking-[0.25em] uppercase text-gold-500 font-medium"
+                className="mt-6 text-sm tracking-[0.25em] uppercase text-gold-700 font-bold"
               >
                 {weddingConfig.displayDate}
               </motion.p>

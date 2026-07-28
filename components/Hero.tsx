@@ -74,7 +74,7 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.4 }}
-          className="text-xs uppercase tracking-[0.25em] text-warm-400 mb-4 font-medium"
+          className="text-xs uppercase tracking-[0.25em] text-warm-600 mb-4 font-semibold"
         >
           Evleniyoruz
         </motion.p>
@@ -85,15 +85,15 @@ export const Hero: React.FC = () => {
           transition={{ duration: 1.2, delay: 0.5 }}
           className="relative px-4"
         >
-          <h1 className="font-script text-5xl sm:text-7xl md:text-8xl font-normal text-warm-700 tracking-tight leading-tight">
+          <h1 className="font-script text-6xl sm:text-7xl md:text-8xl font-semibold text-warm-800 tracking-tight leading-tight">
             {weddingConfig.groomName}
           </h1>
           <div className="my-3 flex items-center justify-center gap-4">
-            <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-gold-400/50 to-transparent" />
-            <span className="font-script text-4xl sm:text-5xl text-gold-400">&</span>
-            <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-gold-400/50 to-transparent" />
+            <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+            <span className="font-script text-4xl sm:text-5xl text-gold-600 font-bold">&</span>
+            <div className="h-[1.5px] w-16 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
           </div>
-          <h1 className="font-script text-5xl sm:text-7xl md:text-8xl font-normal text-warm-700 tracking-tight leading-tight">
+          <h1 className="font-script text-6xl sm:text-7xl md:text-8xl font-semibold text-warm-800 tracking-tight leading-tight">
             {weddingConfig.brideName}
           </h1>
         </motion.div>
@@ -103,7 +103,7 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="font-serif italic text-base sm:text-xl text-warm-500 mt-6 max-w-md px-4 leading-relaxed"
+          className="font-serif italic text-base sm:text-xl text-warm-700 font-medium mt-6 max-w-md px-4 leading-relaxed"
         >
           &quot;{weddingConfig.slogan}&quot;
         </motion.p>
@@ -115,18 +115,18 @@ export const Hero: React.FC = () => {
           transition={{ duration: 1, delay: 1 }}
           className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-8"
         >
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/80 text-xs sm:text-sm text-warm-600 border border-gold-200/60 shadow-soft backdrop-blur-sm">
-            <Calendar className="w-4 h-4 text-gold-400" />
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white text-xs sm:text-sm text-warm-800 font-semibold border border-gold-300 shadow-soft backdrop-blur-sm">
+            <Calendar className="w-4 h-4 text-gold-600" />
             <span>{weddingConfig.displayDate}</span>
           </div>
 
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/80 text-xs sm:text-sm text-warm-600 border border-gold-200/60 shadow-soft backdrop-blur-sm">
-            <Clock className="w-4 h-4 text-gold-400" />
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white text-xs sm:text-sm text-warm-800 font-semibold border border-gold-300 shadow-soft backdrop-blur-sm">
+            <Clock className="w-4 h-4 text-gold-600" />
             <span>{weddingConfig.displayTime}</span>
           </div>
 
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/80 text-xs sm:text-sm text-warm-600 border border-gold-200/60 shadow-soft backdrop-blur-sm">
-            <MapPin className="w-4 h-4 text-gold-400" />
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white text-xs sm:text-sm text-warm-800 font-semibold border border-gold-300 shadow-soft backdrop-blur-sm">
+            <MapPin className="w-4 h-4 text-gold-600" />
             <span>{weddingConfig.venue.city}</span>
           </div>
         </motion.div>

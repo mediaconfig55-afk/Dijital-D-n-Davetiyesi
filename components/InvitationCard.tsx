@@ -47,12 +47,12 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onOpenRSVP }) =>
           transition={{ delay: 0.2, duration: 0.6 }}
           className="flex flex-col items-center text-center mb-6"
         >
-          <div className="w-14 h-14 rounded-full border border-gold-400/30 flex items-center justify-center bg-cream-50/80 mb-3 shadow-gold-soft">
-            <span className="font-serif text-gold-gradient font-bold text-lg">
+          <div className="w-14 h-14 rounded-full border border-gold-500 flex items-center justify-center bg-white mb-3 shadow-gold-soft">
+            <span className="font-serif text-gold-gradient font-bold text-xl">
               {weddingConfig.coupleInitials}
             </span>
           </div>
-          <span className="text-[11px] uppercase tracking-[0.3em] text-gold-500/80 font-medium">
+          <span className="text-[11px] uppercase tracking-[0.3em] text-gold-700 font-semibold">
             Düğün Davetiyesi
           </span>
         </motion.div>
@@ -65,7 +65,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onOpenRSVP }) =>
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-center mb-6"
         >
-          <p className="font-serif text-lg sm:text-2xl text-warm-600 leading-relaxed font-light px-2">
+          <p className="font-serif text-lg sm:text-2xl text-warm-800 leading-relaxed font-medium px-2">
             &quot;{weddingConfig.invitationText}&quot;
           </p>
         </motion.div>
@@ -81,8 +81,8 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onOpenRSVP }) =>
           transition={{ delay: 0.4, duration: 0.8 }}
           className="text-center my-6"
         >
-          <h2 className="font-script text-4xl sm:text-5xl text-warm-700 font-normal">
-            {weddingConfig.groomName} <span className="text-gold-400">&</span> {weddingConfig.brideName}
+          <h2 className="font-script text-5xl sm:text-6xl text-warm-900 font-semibold">
+            {weddingConfig.groomName} <span className="text-gold-600 font-bold">&</span> {weddingConfig.brideName}
           </h2>
         </motion.div>
 
@@ -97,35 +97,35 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onOpenRSVP }) =>
           className="grid grid-cols-2 gap-3 sm:gap-4 my-6"
         >
           {/* Damadın Ailesi */}
-          <div className="bg-cream-50/80 border border-gold-200/40 rounded-xl p-4 text-center relative overflow-hidden group hover:shadow-card-hover transition-all duration-300">
-            <div className="absolute top-1 right-1 text-rose-200/30 text-sm">✿</div>
+          <div className="bg-white border border-gold-300 rounded-xl p-4 text-center relative overflow-hidden group hover:shadow-card-hover transition-all duration-300">
+            <div className="absolute top-1 right-1 text-rose-300 text-sm">✿</div>
             <div className="text-2xl mb-2">🤵</div>
-            <p className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-gold-500/70 font-medium mb-2">
+            <p className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-gold-700 font-bold mb-2">
               Damadın Ailesi
             </p>
-            <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-gold-400/40 to-transparent mx-auto mb-2" />
-            <p className="font-serif text-sm sm:text-base text-warm-700 font-medium leading-relaxed">
+            <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mb-2" />
+            <p className="font-serif text-sm sm:text-base text-warm-900 font-semibold leading-relaxed">
               {weddingConfig.parents.groom.father}
             </p>
-            <p className="text-[10px] text-warm-400 my-0.5">&</p>
-            <p className="font-serif text-sm sm:text-base text-warm-700 font-medium leading-relaxed">
+            <p className="text-[10px] text-warm-500 font-bold my-0.5">&</p>
+            <p className="font-serif text-sm sm:text-base text-warm-900 font-semibold leading-relaxed">
               {weddingConfig.parents.groom.mother}
             </p>
           </div>
 
           {/* Gelinin Ailesi */}
-          <div className="bg-cream-50/80 border border-gold-200/40 rounded-xl p-4 text-center relative overflow-hidden group hover:shadow-card-hover transition-all duration-300">
-            <div className="absolute top-1 right-1 text-rose-200/30 text-sm">✿</div>
+          <div className="bg-white border border-gold-300 rounded-xl p-4 text-center relative overflow-hidden group hover:shadow-card-hover transition-all duration-300">
+            <div className="absolute top-1 right-1 text-rose-300 text-sm">✿</div>
             <div className="text-2xl mb-2">👰</div>
-            <p className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-gold-500/70 font-medium mb-2">
+            <p className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-gold-700 font-bold mb-2">
               Gelinin Ailesi
             </p>
-            <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-gold-400/40 to-transparent mx-auto mb-2" />
-            <p className="font-serif text-sm sm:text-base text-warm-700 font-medium leading-relaxed">
+            <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mb-2" />
+            <p className="font-serif text-sm sm:text-base text-warm-900 font-semibold leading-relaxed">
               {weddingConfig.parents.bride.father}
             </p>
-            <p className="text-[10px] text-warm-400 my-0.5">&</p>
-            <p className="font-serif text-sm sm:text-base text-warm-700 font-medium leading-relaxed">
+            <p className="text-[10px] text-warm-500 font-bold my-0.5">&</p>
+            <p className="font-serif text-sm sm:text-base text-warm-900 font-semibold leading-relaxed">
               {weddingConfig.parents.bride.mother}
             </p>
           </div>
@@ -140,32 +140,32 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ onOpenRSVP }) =>
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="space-y-3 my-6 bg-cream-50/60 p-5 rounded-xl border border-gold-200/20"
+          className="space-y-3 my-6 bg-white p-5 rounded-xl border border-gold-300"
         >
           {/* Date & Time */}
-          <div className="flex items-start gap-3 text-warm-600">
-            <div className="p-2 rounded-lg bg-gold-400/10 text-gold-500 mt-0.5">
+          <div className="flex items-start gap-3 text-warm-800">
+            <div className="p-2 rounded-lg bg-gold-100 text-gold-700 mt-0.5">
               <CalendarCheck className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-warm-400 uppercase tracking-wider font-medium">Tarih & Saat</p>
-              <p className="text-sm sm:text-base text-warm-700 font-medium">
+              <p className="text-xs text-warm-600 uppercase tracking-wider font-semibold">Tarih & Saat</p>
+              <p className="text-sm sm:text-base text-warm-900 font-semibold">
                 {weddingConfig.displayDate} - {weddingConfig.displayTime}
               </p>
             </div>
           </div>
 
           {/* Venue */}
-          <div className="flex items-start gap-3 text-warm-600">
-            <div className="p-2 rounded-lg bg-gold-400/10 text-gold-500 mt-0.5">
+          <div className="flex items-start gap-3 text-warm-800">
+            <div className="p-2 rounded-lg bg-gold-100 text-gold-700 mt-0.5">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-xs text-warm-400 uppercase tracking-wider font-medium">Mekan</p>
-              <p className="text-sm sm:text-base text-warm-700 font-medium">
+              <p className="text-xs text-warm-600 uppercase tracking-wider font-semibold">Mekan</p>
+              <p className="text-sm sm:text-base text-warm-900 font-semibold">
                 {weddingConfig.venue.name}
               </p>
-              <p className="text-xs text-warm-400 mt-0.5">
+              <p className="text-xs text-warm-700 font-medium mt-0.5">
                 {weddingConfig.venue.address}
               </p>
             </div>

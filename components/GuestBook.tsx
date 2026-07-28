@@ -97,7 +97,7 @@ export const GuestBook: React.FC = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-xs uppercase tracking-[0.3em] text-gold-500 font-medium flex items-center justify-center gap-2"
+          className="text-xs uppercase tracking-[0.3em] text-gold-700 font-bold flex items-center justify-center gap-2"
         >
           <MessageSquare className="w-4 h-4" /> Anı Defteri
         </motion.span>
@@ -106,17 +106,17 @@ export const GuestBook: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-serif text-3xl sm:text-5xl text-warm-700 font-light mt-2"
+          className="font-serif text-3xl sm:text-5xl text-warm-900 font-semibold mt-2"
         >
           Mesaj Defterimiz
         </motion.h2>
-        <p className="text-xs sm:text-sm text-warm-400 mt-2">
+        <p className="text-xs sm:text-sm text-warm-700 font-medium mt-2">
           Bizim için bir tebrik mesajı veya güzel bir temenni bırakın.
         </p>
         <div className="flex items-center justify-center gap-2 mt-4">
-          <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-gold-400/50" />
-          <span className="text-rose-300/50 text-sm">✿</span>
-          <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-gold-400/50" />
+          <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-gold-500" />
+          <span className="text-rose-400 text-sm">✿</span>
+          <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-gold-500" />
         </div>
       </div>
 
@@ -126,11 +126,11 @@ export const GuestBook: React.FC = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         onSubmit={handleSubmit}
-        className="glass-card-gold p-6 sm:p-8 mb-12 border-gold-glow"
+        className="glass-card-gold p-6 sm:p-8 mb-12 border-gold-300 shadow-soft"
       >
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block text-xs uppercase tracking-wider text-warm-400 mb-1 font-medium">
+            <label className="block text-xs uppercase tracking-wider text-warm-800 mb-1 font-bold">
               İsminiz
             </label>
             <input
@@ -139,12 +139,12 @@ export const GuestBook: React.FC = () => {
               value={guestName}
               onChange={(e) => setGuestName(e.target.value)}
               placeholder="Adınız Soyadınız"
-              className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gold-200/40 focus:border-gold-400 text-warm-700 text-sm focus:outline-none transition-colors placeholder:text-warm-300"
+              className="w-full px-4 py-3 rounded-xl bg-white border border-gold-300 focus:border-gold-500 text-warm-900 font-medium text-sm focus:outline-none transition-colors placeholder:text-warm-400"
             />
           </div>
 
           <div>
-            <label className="block text-xs uppercase tracking-wider text-warm-400 mb-1 font-medium">
+            <label className="block text-xs uppercase tracking-wider text-warm-800 mb-1 font-bold">
               Mesajınız
             </label>
             <textarea
@@ -153,7 +153,7 @@ export const GuestBook: React.FC = () => {
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)}
               placeholder="Tebriklerinizi ve dileklerinizi buraya yazabilirsiniz..."
-              className="w-full px-4 py-3 rounded-xl bg-white/60 border border-gold-200/40 focus:border-gold-400 text-warm-700 text-sm focus:outline-none transition-colors resize-none placeholder:text-warm-300"
+              className="w-full px-4 py-3 rounded-xl bg-white border border-gold-300 focus:border-gold-500 text-warm-900 font-medium text-sm focus:outline-none transition-colors resize-none placeholder:text-warm-400"
             />
           </div>
 
@@ -195,12 +195,12 @@ export const GuestBook: React.FC = () => {
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-serif text-lg text-warm-700 font-medium">
+                  <h4 className="font-serif text-lg text-warm-900 font-semibold">
                     {item.guest_name}
                   </h4>
-                  <Heart className="w-4 h-4 text-rose-300/60" />
+                  <Heart className="w-4 h-4 text-rose-400 fill-rose-300" />
                 </div>
-                <p className="text-sm text-warm-500 mt-1 leading-relaxed font-light">
+                <p className="text-sm text-warm-800 mt-1 leading-relaxed font-medium">
                   {item.message}
                 </p>
               </div>

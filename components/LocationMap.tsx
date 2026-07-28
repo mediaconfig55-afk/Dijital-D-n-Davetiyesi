@@ -16,28 +16,28 @@ export const LocationMap: React.FC = () => {
       >
         {/* Section Header */}
         <div className="text-center mb-8">
-          <span className="text-xs uppercase tracking-[0.3em] text-gold-500 font-medium flex items-center justify-center gap-2">
+          <span className="text-xs uppercase tracking-[0.3em] text-gold-700 font-bold flex items-center justify-center gap-2">
             <Compass className="w-4 h-4" /> Ulaşım &amp; Konum
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-warm-700 font-light mt-2">
+          <h2 className="font-serif text-3xl sm:text-4xl text-warm-900 font-semibold mt-2">
             Düğün Alanı
           </h2>
           <div className="flex items-center justify-center gap-2 mt-4">
-            <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-gold-400/50" />
-            <span className="text-rose-300/50 text-sm">✿</span>
-            <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-gold-400/50" />
+            <div className="w-12 h-[1px] bg-gradient-to-r from-transparent to-gold-500" />
+            <span className="text-rose-400 text-sm">✿</span>
+            <div className="w-12 h-[1px] bg-gradient-to-l from-transparent to-gold-500" />
           </div>
         </div>
 
         {/* Venue Info Box */}
-        <div className="text-center max-w-md mx-auto mb-8 bg-cream-50/60 p-6 rounded-2xl border border-gold-200/20">
-          <div className="w-12 h-12 rounded-full bg-gold-400/10 border border-gold-200/30 flex items-center justify-center text-gold-500 mx-auto mb-3">
+        <div className="text-center max-w-md mx-auto mb-8 bg-white p-6 rounded-2xl border border-gold-300 shadow-soft">
+          <div className="w-12 h-12 rounded-full bg-gold-100 border border-gold-300 flex items-center justify-center text-gold-700 mx-auto mb-3">
             <MapPin className="w-6 h-6" />
           </div>
-          <h3 className="font-serif text-2xl text-warm-700 font-medium">
+          <h3 className="font-serif text-2xl text-warm-900 font-bold">
             {weddingConfig.venue.name}
           </h3>
-          <p className="text-sm text-warm-500 mt-2 leading-relaxed">
+          <p className="text-sm text-warm-800 mt-2 leading-relaxed font-medium">
             {weddingConfig.venue.address}
           </p>
         </div>

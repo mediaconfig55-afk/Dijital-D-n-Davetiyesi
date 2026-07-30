@@ -25,6 +25,10 @@ create policy "Public Upload to Wedding Photos"
 on storage.objects for insert 
 with check (bucket_id = 'wedding-photos');
 
+create policy "Public Delete from Wedding Photos" 
+on storage.objects for delete 
+using (bucket_id = 'wedding-photos');
+
 
 -- 2. PHOTOS TABLE
 create table public.photos (
@@ -45,6 +49,10 @@ create policy "Allow public read access to photos"
 create policy "Allow public insert access to photos"
   on public.photos for insert
   with check (true);
+
+create policy "Allow public delete access to photos"
+  on public.photos for delete
+  using (true);
 
 
 -- 3. MESSAGES TABLE
@@ -94,7 +102,7 @@ create table public.photo_consents (
   guest_name text not null,
   consent_text_version text not null default 'v1.0',
   consent_given boolean not null default true,
-  photo_id uuid references public.photos(id) on delete set null
+  photo_id uuid references public.photos(id) on delete cascade
 );
 
 alter table public.photo_consents enable row level security;
@@ -106,3 +114,32 @@ create policy "Allow public insert access to photo_consents"
 create policy "Allow public read access to photo_consents"
   on public.photo_consents for select
   using (true);
+
+
+-- 6. AUTOMATIC 2-DAY DELETION FUNCTION & CRON
+create or replace function public.delete_old_wedding_photos()
+returns void
+language plpgsql
+security definer
+as $$
+declare
+  r record;
+begin
+  for r in 
+    select id, storage_path 
+    from public.photos 
+    where created_at < now() - interval '2 days'
+  loop
+    delete from storage.objects
+    where bucket_id = 'wedding-photos'
+      and name = r.storage_path;
+
+    delete from public.photo_consents
+    where photo_id = r.id;
+
+    delete from public.photos
+    where id = r.id;
+  end loop;
+end;
+$$;
+

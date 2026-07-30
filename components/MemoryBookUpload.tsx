@@ -20,7 +20,7 @@ Yüklediğiniz fotoğraf(lar), adınız-soyadınız ve varsa mesajınız işlene
 Yüklediğiniz fotoğraflar, düğün anı albümü oluşturmak amacıyla dijital ortamda saklanacak ve düğün gecesi belirlenen saatten itibaren dijital davetiye anı duvarında sergilenebilecektir.
 
 3. Saklama Süresi
-Fotoğraflar ve ilgili kişisel veriler, veri sorumlusu tarafından silinene kadar bulut depolama hizmetinde saklanacaktır.
+Fotoğraflar ve ilgili kişisel veriler, veri güvenliği ve anı koruma ilkesi gereğince 2 gün (48 saat) boyunca saklanacak, 2 günün sonunda sistem tarafından otomatik ve kalıcı olarak silinecektir.
 
 4. Üçüncü Taraflarla Paylaşım
 Verileriniz, hosting ve depolama hizmeti sağlayıcısı dışında herhangi bir üçüncü tarafla paylaşılmayacaktır.
@@ -301,28 +301,28 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             <Heart className="w-5 h-5 fill-rose-300/40" />
             <Sparkles className="w-4 h-4 text-gold-500" />
           </div>
-          <h2 className="font-serif text-2xl sm:text-4xl text-warm-700 font-light">
+          <h2 className="font-serif text-2xl sm:text-4xl text-warm-800 font-medium">
             Bugünden Bir Kare ve Bir Hatıra Bırakın ❤️
           </h2>
-          <p className="text-xs sm:text-sm text-warm-500 mt-2">
+          <p className="text-xs sm:text-sm text-warm-600 mt-2 font-medium">
             Bu özel günden çektiğiniz fotoğrafları ve güzel dileklerinizi dijital anı albümümüze ekleyin.
           </p>
         </div>
 
         {/* TIME STAGE 1: BEFORE 19:00 (LOCKED) */}
         {!isUploadOpen ? (
-          <div className="text-center p-8 sm:p-12 rounded-2xl bg-white/70 border border-gold-200/40 space-y-4 shadow-soft">
-            <div className="w-16 h-16 rounded-full bg-gold-400/10 border border-gold-400/30 flex items-center justify-center mx-auto text-gold-500 animate-pulse">
+          <div className="text-center p-8 sm:p-12 rounded-2xl bg-white/80 border border-gold-200/60 space-y-4 shadow-soft">
+            <div className="w-16 h-16 rounded-full bg-gold-100 border border-gold-300 flex items-center justify-center mx-auto text-gold-600 animate-pulse">
               <Lock className="w-8 h-8" />
             </div>
-            <h3 className="font-serif text-xl sm:text-2xl text-warm-700 font-light">
+            <h3 className="font-serif text-xl sm:text-2xl text-warm-800 font-medium">
               Fotoğraf Yükleme Henüz Açılmadı
             </h3>
-            <p className="text-sm text-gold-600 font-medium">
-              📷 Fotoğraf paylaşım alanı düğün günü saat <strong className="text-warm-800">19:00</strong>&apos;da otomatik açılacaktır.
+            <p className="text-sm text-gold-700 font-semibold">
+              📷 Fotoğraf paylaşım alanı düğün günü saat <strong className="text-warm-900">19:00</strong>&apos;da otomatik açılacaktır.
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-100 border border-gold-200/40 text-xs text-warm-600 mt-2">
-              <Clock className="w-4 h-4 text-gold-500" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-100 border border-gold-300 text-xs text-warm-800 font-semibold mt-2">
+              <Clock className="w-4 h-4 text-gold-600" />
               <span>Düğün Tarihi: {weddingConfig.displayDate} - 19:00</span>
             </div>
           </div>
@@ -334,7 +334,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
               onClick={() => fileInputRef.current?.click()}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              className="border-2 border-dashed border-gold-300/60 hover:border-gold-500 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-white/60 hover:bg-white/90 group relative overflow-hidden shadow-soft"
+              className="border-2 border-dashed border-gold-400/60 hover:border-gold-600 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-white/80 hover:bg-white group relative overflow-hidden shadow-soft"
             >
               <input
                 type="file"
@@ -345,28 +345,28 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
               />
 
               {previewUrl ? (
-                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gold-300/40">
+                <div className="relative w-full h-56 rounded-xl overflow-hidden border border-gold-300/60">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={previewUrl}
                     alt="Önizleme"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-warm-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-xs text-white font-medium bg-warm-800/80 px-4 py-2 rounded-full border border-gold-300/40">
+                  <div className="absolute inset-0 bg-warm-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs text-white font-semibold bg-warm-800/90 px-4 py-2 rounded-full border border-gold-300">
                       Fotoğrafı Değiştir
                     </span>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-4">
-                  <div className="p-4 rounded-full bg-gold-400/10 border border-gold-200/40 text-gold-500 mb-3 group-hover:scale-110 transition-transform">
+                  <div className="p-4 rounded-full bg-gold-100 border border-gold-300 text-gold-600 mb-3 group-hover:scale-110 transition-transform">
                     <UploadCloud className="w-8 h-8" />
                   </div>
-                  <p className="text-sm font-medium text-warm-700">
+                  <p className="text-sm font-semibold text-warm-800">
                     Fotoğrafınızı Seçin veya Sürükleyip Bırakın
                   </p>
-                  <p className="text-xs text-warm-400 mt-1">
+                  <p className="text-xs text-warm-500 font-medium mt-1">
                     (Telefon galerisinden seçebilir veya anlık çekebilirsiniz)
                   </p>
                 </div>
@@ -376,7 +376,7 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             {/* Inputs */}
             <div className="space-y-4">
               <div>
-                <label className="block text-xs uppercase tracking-wider text-warm-500 mb-1.5 font-medium">
+                <label className="block text-xs uppercase tracking-wider text-warm-700 mb-1.5 font-semibold">
                   Adınız Soyadınız (İsteğe Bağlı)
                 </label>
                 <input
@@ -384,12 +384,12 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="Örn: Ahmet & Zeynep"
-                  className="w-full px-4 py-3 rounded-xl bg-white/70 border border-gold-200/50 focus:border-gold-500 text-warm-700 text-sm focus:outline-none transition-colors placeholder:text-warm-300"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-gold-300 focus:border-gold-500 text-warm-900 text-sm focus:outline-none transition-colors placeholder:text-warm-400 font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-wider text-warm-500 mb-1.5 font-medium">
+                <label className="block text-xs uppercase tracking-wider text-warm-700 mb-1.5 font-semibold">
                   Mesajınız / Dileğiniz
                 </label>
                 <textarea
@@ -397,17 +397,17 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Örn: Size ömür boyu mutluluklar dileriz! ❤️"
                   rows={3}
-                  className="w-full px-4 py-3 rounded-xl bg-white/70 border border-gold-200/50 focus:border-gold-500 text-warm-700 text-sm focus:outline-none transition-colors resize-none placeholder:text-warm-300"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-gold-300 focus:border-gold-500 text-warm-900 text-sm focus:outline-none transition-colors resize-none placeholder:text-warm-400 font-medium"
                 />
               </div>
             </div>
 
             {/* Notice for State 2 (19:00 - 00:00) */}
             {!isRevealOpen && (
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-gold-950/40 border border-gold-500/30 text-gold-200 text-xs">
-                <EyeOff className="w-4 h-4 text-gold-400 shrink-0" />
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-gold-50 border border-gold-300 text-warm-800 text-xs">
+                <EyeOff className="w-4 h-4 text-gold-600 shrink-0" />
                 <span>
-                  <strong>Gizli Moderasyon Modu:</strong> Yüklediğiniz fotoğraflar saat <strong className="text-white">00:00&apos;da</strong> canlı anı albümünde tüm misafirlere açılacaktır.
+                  <strong className="text-gold-800">Gizli Moderasyon Modu:</strong> Yüklediğiniz fotoğraflar saat <strong className="text-warm-900">00:00&apos;da</strong> canlı anı albümünde tüm misafirlere açılacaktır.
                 </span>
               </div>
             )}
@@ -419,9 +419,9 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="flex items-center gap-2 p-3 rounded-xl bg-red-950/60 border border-red-800/60 text-red-200 text-xs"
+                  className="flex items-center gap-2 p-3.5 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-semibold"
                 >
-                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
                   <span>{errorMsg}</span>
                 </motion.div>
               )}
@@ -434,12 +434,12 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="flex items-center gap-3 p-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 text-sm"
+                  className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-sm"
                 >
-                  <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 animate-bounce" />
+                  <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 animate-bounce" />
                   <div>
-                    <p className="font-semibold text-emerald-300">Harika! Fotoğrafınız Alındı</p>
-                    <p className="text-xs text-emerald-200/80">Fotoğrafınız kaydedildi. Gece 00:00&apos;da anı albümünde yayınlanacaktır.</p>
+                    <p className="font-bold text-emerald-900">Harika! Fotoğrafınız Alındı</p>
+                    <p className="text-xs text-emerald-700 font-medium">Fotoğrafınız kaydedildi. Gece 00:00&apos;da anı albümünde yayınlanacaktır.</p>
                   </div>
                 </motion.div>
               )}
@@ -448,11 +448,11 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             {/* Progress Bar */}
             {isUploading && (
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-gold-300">
+                <div className="flex items-center justify-between text-xs text-warm-700 font-semibold">
                   <span>Fotoğraf Yükleniyor...</span>
                   <span>%{uploadProgress}</span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
+                <div className="w-full h-2.5 rounded-full bg-cream-200 overflow-hidden border border-gold-200">
                   <div
                     className="h-full bg-gold-gradient transition-all duration-300"
                     style={{ width: `${uploadProgress}%` }}
@@ -465,11 +465,11 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             <button
               type="submit"
               disabled={isUploading || !selectedFile}
-              className="w-full py-4 rounded-xl bg-gold-gradient text-black font-semibold text-sm flex items-center justify-center gap-2 shadow-gold-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
+              className="w-full py-4 rounded-xl bg-gold-gradient text-white font-bold text-sm flex items-center justify-center gap-2 shadow-gold-glow hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
             >
               {isUploading ? (
                 <span className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Yükleniyor...
                 </span>
               ) : (
@@ -491,22 +491,22 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
           className="space-y-8"
         >
           <div className="text-center">
-            <span className="text-xs uppercase tracking-[0.3em] text-gold-400 font-medium flex items-center justify-center gap-2">
+            <span className="text-xs uppercase tracking-[0.3em] text-gold-600 font-bold flex items-center justify-center gap-2">
               <Camera className="w-4 h-4" /> Düğün Anı Duvarı
             </span>
-            <h3 className="font-serif text-2xl sm:text-4xl text-neutral-100 font-light mt-2">
+            <h3 className="font-serif text-2xl sm:text-4xl text-warm-800 font-medium mt-2">
               Misafirlerimizden Gelen Kareler ❤️
             </h3>
-            <p className="text-xs text-neutral-400 mt-1">
+            <p className="text-xs text-warm-600 font-medium mt-1">
               Fotoğrafların üzerine tıklayarak büyük boyutta görüntüleyebilirsiniz
             </p>
           </div>
 
           {uploadedPhotos.length === 0 ? (
-            <div className="text-center py-12 text-neutral-400 glass-card max-w-md mx-auto p-6">
-              <ImageIcon className="w-10 h-10 text-gold-400/50 mx-auto mb-2" />
-              <p className="text-sm">Henüz yüklenmiş fotoğraf bulunmuyor.</p>
-              <p className="text-xs text-neutral-500 mt-1">Fotoğraflarınızı yukarıdaki alandan yükleyebilirsiniz!</p>
+            <div className="text-center py-12 text-warm-600 glass-card-gold max-w-md mx-auto p-6 border border-gold-300">
+              <ImageIcon className="w-10 h-10 text-gold-500 mx-auto mb-2" />
+              <p className="text-sm font-semibold">Henüz yüklenmiş fotoğraf bulunmuyor.</p>
+              <p className="text-xs text-warm-500 mt-1">Fotoğraflarınızı yukarıdaki alandan yükleyebilirsiniz!</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
@@ -516,32 +516,32 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   onClick={() => setActiveLightboxPhoto(photo)}
-                  className="group relative rounded-2xl overflow-hidden glass-card-gold border-gold-500/20 hover:border-gold-400/60 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                  className="group relative rounded-2xl overflow-hidden glass-card-gold border-gold-300 hover:border-gold-500 cursor-pointer shadow-md transition-all duration-300 hover:scale-[1.02]"
                 >
-                  <div className="relative h-60 w-full overflow-hidden bg-black/60">
+                  <div className="relative h-60 w-full overflow-hidden bg-warm-100">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={photo.photo_url}
                       alt={photo.guest_name || 'Misafir fotoğrafı'}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="p-3 rounded-full bg-black/70 border border-gold-400/60 text-gold-300">
+                    <div className="absolute inset-0 bg-warm-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="p-3 rounded-full bg-white/80 border border-gold-400 text-gold-700 shadow-md">
                         <ZoomIn className="w-5 h-5" />
                       </div>
                     </div>
                   </div>
 
                   {(photo.guest_name || photo.message) && (
-                    <div className="p-4 border-t border-gold-500/20 bg-black/40">
+                    <div className="p-4 border-t border-gold-200/50 bg-white/90">
                       {photo.guest_name && (
-                        <p className="font-semibold text-sm text-gold-300 flex items-center gap-1.5">
-                          <Heart className="w-3.5 h-3.5 fill-gold-400 text-gold-400 shrink-0" />
+                        <p className="font-semibold text-sm text-gold-700 flex items-center gap-1.5">
+                          <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400 shrink-0" />
                           {photo.guest_name}
                         </p>
                       )}
                       {photo.message && (
-                        <p className="text-xs text-neutral-300 italic mt-1 line-clamp-2">
+                        <p className="text-xs text-warm-700 italic mt-1 line-clamp-2">
                           &quot;{photo.message}&quot;
                         </p>
                       )}
@@ -562,23 +562,23 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setActiveLightboxPhoto(null)}
-            className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9999] bg-warm-900/90 backdrop-blur-md flex items-center justify-center p-4"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center rounded-2xl bg-neutral-950 border border-gold-400/30 overflow-hidden shadow-2xl"
+              className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center rounded-2xl bg-white border border-gold-300 overflow-hidden shadow-2xl"
             >
               <button
                 onClick={() => setActiveLightboxPhoto(null)}
-                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/70 border border-gold-400/40 text-neutral-200 hover:text-gold-400 transition-colors"
+                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-warm-900/70 border border-gold-200 text-white hover:text-gold-300 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="relative w-full h-[65vh] bg-black flex items-center justify-center overflow-hidden">
+              <div className="relative w-full h-[65vh] bg-warm-950 flex items-center justify-center overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeLightboxPhoto.photo_url}
@@ -587,18 +587,18 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                 />
               </div>
 
-              <div className="w-full p-5 bg-gradient-to-t from-black to-neutral-950 border-t border-neutral-800 text-center">
+              <div className="w-full p-5 bg-white border-t border-gold-200 text-center">
                 {activeLightboxPhoto.guest_name && (
-                  <p className="font-serif text-lg text-gold-300 font-medium">
+                  <p className="font-serif text-lg text-gold-700 font-semibold">
                     {activeLightboxPhoto.guest_name}
                   </p>
                 )}
                 {activeLightboxPhoto.message && (
-                  <p className="text-sm text-neutral-300 italic mt-1">
+                  <p className="text-sm text-warm-700 italic mt-1">
                     &quot;{activeLightboxPhoto.message}&quot;
                   </p>
                 )}
-                <p className="text-[10px] text-neutral-500 mt-2 uppercase tracking-widest">
+                <p className="text-[10px] text-warm-500 font-semibold mt-2 uppercase tracking-widest">
                   {new Date(activeLightboxPhoto.created_at).toLocaleDateString('tr-TR', {
                     day: 'numeric',
                     month: 'long',
@@ -620,65 +620,65 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
             onClick={(e) => { if (e.target === e.currentTarget) setShowConsentModal(false); }}
           >
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+            <div className="absolute inset-0 bg-warm-900/80 backdrop-blur-md" />
 
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl border border-gold-400/30 bg-gradient-to-b from-neutral-900 to-black shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl border border-gold-300 bg-white shadow-2xl overflow-hidden z-10"
             >
-              <div className="flex items-center justify-between p-5 border-b border-neutral-800">
+              <div className="flex items-center justify-between p-5 border-b border-gold-200 bg-cream-50">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-full bg-gold-500/10 border border-gold-400/30">
-                    <ShieldCheck className="w-5 h-5 text-gold-400" />
+                  <div className="p-2 rounded-full bg-gold-100 border border-gold-300">
+                    <ShieldCheck className="w-5 h-5 text-gold-600" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-neutral-100">
+                    <h3 className="text-base font-bold text-warm-900">
                       Gizlilik ve KVKK Onayı
                     </h3>
-                    <p className="text-xs text-neutral-400">
+                    <p className="text-xs text-warm-600 font-medium">
                       Fotoğraf yüklemeden önce onayınız gerekmektedir
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowConsentModal(false)}
-                  className="p-1.5 rounded-full hover:bg-neutral-800 transition-colors text-neutral-400 hover:text-neutral-200"
+                  className="p-1.5 rounded-full hover:bg-gold-100 transition-colors text-warm-500 hover:text-warm-800"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-5">
-                <div className="flex items-center gap-2 text-gold-400 mb-3">
+              <div className="flex-1 overflow-y-auto p-5 space-y-4">
+                <div className="flex items-center gap-2 text-gold-700">
                   <ScrollText className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wider font-medium">Aydınlatma Metni</span>
+                  <span className="text-xs uppercase tracking-wider font-bold">Aydınlatma Metni</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-black/60 border border-neutral-800 text-sm text-neutral-300 leading-relaxed whitespace-pre-line max-h-52 overflow-y-auto scrollbar-thin">
+                <div className="p-4 rounded-xl bg-warm-50 border border-warm-200 text-xs sm:text-sm text-warm-800 leading-relaxed whitespace-pre-line max-h-48 overflow-y-auto scrollbar-thin font-medium">
                   {KVKK_CONSENT_TEXT}
                 </div>
 
-                <div className="mt-5">
-                  <label className="block text-xs uppercase tracking-wider text-neutral-400 mb-1.5 font-medium">
-                    Adınız Soyadınız <span className="text-red-400">*</span>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider text-warm-700 mb-1.5 font-bold">
+                    Adınız Soyadınız <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={consentName}
                     onChange={(e) => { setConsentName(e.target.value); setConsentError(null); }}
                     placeholder="Adınızı ve soyadınızı girin"
-                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-neutral-800 focus:border-gold-400 text-neutral-100 text-sm focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-gold-300 focus:border-gold-500 text-warm-900 text-sm focus:outline-none transition-colors font-medium"
                     autoFocus
                   />
                 </div>
 
-                <label className="flex items-start gap-3 mt-5 cursor-pointer group">
+                <label className="flex items-start gap-3 pt-2 cursor-pointer group">
                   <div className="relative mt-0.5">
                     <input
                       type="checkbox"
@@ -686,16 +686,16 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                       onChange={(e) => { setConsentChecked(e.target.checked); setConsentError(null); }}
                       className="sr-only peer"
                     />
-                    <div className="w-5 h-5 rounded-md border-2 border-neutral-600 peer-checked:border-gold-400 peer-checked:bg-gold-400 transition-all flex items-center justify-center group-hover:border-gold-400/60">
+                    <div className="w-5 h-5 rounded-md border-2 border-warm-400 peer-checked:border-gold-600 peer-checked:bg-gold-500 transition-all flex items-center justify-center group-hover:border-gold-500">
                       {consentChecked && (
-                        <svg className="w-3 h-3 text-black" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="2 6 5 9 10 3" />
                         </svg>
                       )}
                     </div>
                   </div>
-                  <span className="text-sm text-neutral-300 leading-snug">
-                    Yukarıdaki <strong className="text-gold-400">Kişisel Verilerin Korunması Aydınlatma Metnini</strong> okudum ve fotoğrafımın dijital ortamda işlenmesine açık rıza veriyorum.
+                  <span className="text-xs sm:text-sm text-warm-800 leading-snug font-medium">
+                    Yukarıdaki <strong className="text-gold-700 font-bold">Kişisel Verilerin Korunması Aydınlatma Metnini</strong> okudum ve fotoğrafımın dijital ortamda işlenmesine açık rıza veriyorum.
                   </span>
                 </label>
 
@@ -705,26 +705,26 @@ export const MemoryBookUpload: React.FC<MemoryBookUploadProps> = ({ onPhotoUploa
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="flex items-center gap-2 p-3 mt-4 rounded-xl bg-red-950/60 border border-red-800/60 text-red-200 text-xs"
+                      className="flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-semibold"
                     >
-                      <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                      <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
                       <span>{consentError}</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
-              <div className="p-5 border-t border-neutral-800 flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <div className="p-5 border-t border-gold-200 bg-cream-50 flex flex-col sm:flex-row gap-3 sm:justify-end">
                 <button
                   onClick={() => setShowConsentModal(false)}
-                  className="px-5 py-2.5 rounded-xl border border-neutral-700 text-neutral-300 text-sm font-medium hover:bg-neutral-800 transition-colors"
+                  className="px-5 py-3 rounded-xl border border-warm-300 bg-white text-warm-700 text-sm font-semibold hover:bg-warm-100 transition-colors"
                 >
                   Vazgeç
                 </button>
                 <button
                   onClick={handleConsentAndUpload}
                   disabled={!consentChecked || !consentName.trim()}
-                  className="px-5 py-2.5 rounded-xl bg-gold-gradient text-black text-sm font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none shadow-gold-glow"
+                  className="px-6 py-3 min-h-[48px] rounded-xl bg-gold-gradient text-white text-sm font-bold flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none shadow-gold-glow cursor-pointer"
                 >
                   <ShieldCheck className="w-4 h-4" />
                   Onaylıyorum ve Gönder

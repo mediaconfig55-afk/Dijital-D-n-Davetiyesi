@@ -26,7 +26,6 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
   // Generate invitation image whenever modal opens
   useEffect(() => {
     if (isOpen && siteUrl) {
-      // Small delay to ensure QR SVG is rendered in the hidden div
       const timer = setTimeout(() => {
         generateInvitationPreview();
       }, 300);
@@ -73,77 +72,90 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
 
   const renderInvitationCanvas = useCallback(async (): Promise<string> => {
     const W = 1200;
-    const H = 2000;
+    const H = 1750;
     const canvas = document.createElement('canvas');
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
     // === BACKGROUND ===
-    ctx.fillStyle = '#FFFDF8';
+    ctx.fillStyle = '#FFFDF9';
     ctx.fillRect(0, 0, W, H);
 
-    // Subtle cream gradient overlay
-    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-    bgGrad.addColorStop(0, 'rgba(255, 253, 248, 1)');
-    bgGrad.addColorStop(0.5, 'rgba(245, 240, 232, 0.3)');
-    bgGrad.addColorStop(1, 'rgba(255, 253, 248, 1)');
+    // Soft Luxury Radial Background Glow
+    const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 100, W / 2, H / 2, W * 0.8);
+    bgGrad.addColorStop(0, '#FFFFFF');
+    bgGrad.addColorStop(0.6, '#FFFDF6');
+    bgGrad.addColorStop(1, '#F8F2E6');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // === DECORATIVE BORDER ===
-    const borderMargin = 40;
-    const borderRadius = 24;
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.35)';
-    ctx.lineWidth = 2;
-    roundRect(ctx, borderMargin, borderMargin, W - borderMargin * 2, H - borderMargin * 2, borderRadius);
+    // === LUXURY DOUBLE GOLD BORDER WITH MOTIFS ===
+    const marginOuter = 36;
+    const marginInner = 50;
+
+    // Outer Thin Golden Border
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, marginOuter, marginOuter, W - marginOuter * 2, H - marginOuter * 2, 20);
     ctx.stroke();
 
-    // Inner border
-    const innerMargin = 52;
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.15)';
-    ctx.lineWidth = 1;
-    roundRect(ctx, innerMargin, innerMargin, W - innerMargin * 2, H - innerMargin * 2, borderRadius - 4);
+    // Inner Thick Golden Border with Dash Pattern Accent
+    ctx.strokeStyle = '#B88E40';
+    ctx.lineWidth = 2.5;
+    roundRect(ctx, marginInner, marginInner, W - marginInner * 2, H - marginInner * 2, 14);
     ctx.stroke();
 
-    // === FLORAL CORNER ORNAMENTS ===
-    ctx.font = '28px serif';
-    ctx.fillStyle = 'rgba(212, 160, 160, 0.4)';
-    ctx.fillText('✿', 62, 85);
-    ctx.fillText('✿', W - 85, 85);
-    ctx.fillText('❀', 62, H - 62);
-    ctx.fillText('❀', W - 85, H - 62);
-
-    // Corner lines
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.3)';
+    // Dotted Decorative Border Layer
+    ctx.strokeStyle = 'rgba(184, 142, 64, 0.4)';
     ctx.lineWidth = 1;
-    // Top-left
-    drawLine(ctx, 95, 68, 140, 68);
-    drawLine(ctx, 68, 95, 68, 140);
-    // Top-right
-    drawLine(ctx, W - 140, 68, W - 95, 68);
-    drawLine(ctx, W - 68, 95, W - 68, 140);
-    // Bottom-left
-    drawLine(ctx, 95, H - 68, 140, H - 68);
-    drawLine(ctx, 68, H - 140, 68, H - 95);
-    // Bottom-right
-    drawLine(ctx, W - 140, H - 68, W - 95, H - 68);
-    drawLine(ctx, W - 68, H - 140, W - 68, H - 95);
+    ctx.setLineDash([4, 4]);
+    roundRect(ctx, marginInner + 8, marginInner + 8, W - (marginInner + 8) * 2, H - (marginInner + 8) * 2, 10);
+    ctx.stroke();
+    ctx.setLineDash([]); // Reset line dash
 
-    let yPos = 140;
+    // === ORNATE CORNER MOTIFS ===
+    drawOrnateCorners(ctx, marginInner + 18, W - (marginInner + 18), marginInner + 18, H - (marginInner + 18));
 
-    // === CREST / INITIALS CIRCLE ===
-    const crestY = yPos + 45;
+    let yPos = 135;
+
+    // === CREST / ROYAL EMBLEM (INITIALS SEAL) ===
+    const crestY = yPos + 40;
+    
+    // Outer Decorative Rays / Ring
+    ctx.save();
+    ctx.translate(W / 2, crestY);
+    ctx.strokeStyle = 'rgba(184, 142, 64, 0.3)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 24; i++) {
+      ctx.rotate((Math.PI * 2) / 24);
+      ctx.beginPath();
+      ctx.moveTo(52, 0);
+      ctx.lineTo(58, 0);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Outer Circle
     ctx.beginPath();
-    ctx.arc(W / 2, crestY, 48, 0, Math.PI * 2);
+    ctx.arc(W / 2, crestY, 50, 0, Math.PI * 2);
     ctx.strokeStyle = '#B88E40';
     ctx.lineWidth = 2;
     ctx.stroke();
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = '#FFFDF8';
     ctx.fill();
 
-    // Initials text
-    ctx.font = 'bold 28px "Playfair Display", Georgia, serif';
+    // Inner Dotted Circle
+    ctx.beginPath();
+    ctx.arc(W / 2, crestY, 44, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(184, 142, 64, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Initials Text
+    ctx.font = 'bold 26px "Playfair Display", Georgia, serif';
     ctx.fillStyle = '#8B6F47';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -151,63 +163,61 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
 
     yPos = crestY + 70;
 
-    // === "DÜĞÜN DAVETİYESİ" ===
-    ctx.font = '600 14px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#6B5539';
+    // === "DÜĞÜN DAVETİYESİ" TITLE & ORNAMENT ===
+    drawMotifHeaderDecoration(ctx, W / 2, yPos - 12);
+    
+    ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+    ctx.fillStyle = '#7A5B2B';
     ctx.textAlign = 'center';
-    ctx.letterSpacing = '0.3em';
-    ctx.fillText('D Ü Ğ Ü N   D A V E T İ Y E S İ', W / 2, yPos);
+    ctx.fillText('D Ü Ğ Ü N   D A V E T İ Y E S İ', W / 2, yPos + 10);
 
-    yPos += 55;
+    yPos += 50;
 
     // === INVITATION TEXT ===
-    ctx.font = '500 26px "Cormorant Garamond", Georgia, serif';
+    ctx.font = '500 25px "Cormorant Garamond", Georgia, serif';
     ctx.fillStyle = '#2A1D14';
     ctx.textAlign = 'center';
-    const invLines = wrapText(ctx, `"${weddingConfig.invitationText}"`, W - 200);
+    const invLines = wrapText(ctx, `"${weddingConfig.invitationText}"`, W - 260);
     invLines.forEach((line) => {
       ctx.fillText(line, W / 2, yPos);
-      yPos += 38;
+      yPos += 36;
     });
 
-    yPos += 20;
+    yPos += 15;
 
-    // === GOLD DIVIDER ===
-    drawGoldDivider(ctx, W, yPos);
-    yPos += 35;
+    // === ORNATE GOLD DIVIDER ===
+    drawOrnateDivider(ctx, W / 2, yPos);
+    yPos += 45;
 
     // === COUPLE NAMES ===
-    ctx.font = '600 72px "Great Vibes", cursive';
+    ctx.font = '600 76px "Great Vibes", cursive';
     ctx.fillStyle = '#1A120C';
     ctx.textAlign = 'center';
     const namesText = `${weddingConfig.groomName}  &  ${weddingConfig.brideName}`;
+    ctx.fillText(namesText, W / 2, yPos);
 
-    // Gold gradient for "&"
-    // First draw full name
-    ctx.fillText(namesText, W / 2, yPos + 15);
+    yPos += 50;
 
-    yPos += 70;
-
-    // === GOLD DIVIDER ===
-    drawGoldDivider(ctx, W, yPos);
+    // === ORNATE GOLD DIVIDER ===
+    drawOrnateDivider(ctx, W / 2, yPos);
     yPos += 45;
 
     // === PARENT CARDS ===
-    const cardWidth = 260;
-    const cardHeight = 200;
-    const cardGap = 40;
+    const cardWidth = 280;
+    const cardHeight = 195;
+    const cardGap = 45;
     const cardStartX = W / 2 - cardWidth - cardGap / 2;
 
-    // Groom's Family Card
-    drawParentCard(ctx, cardStartX, yPos, cardWidth, cardHeight, {
+    // Damadın Ailesi
+    drawOrnateParentCard(ctx, cardStartX, yPos, cardWidth, cardHeight, {
       emoji: '🤵',
       title: 'DAMADIN AİLESİ',
       father: weddingConfig.parents.groom.father,
       mother: weddingConfig.parents.groom.mother,
     });
 
-    // Bride's Family Card
-    drawParentCard(ctx, cardStartX + cardWidth + cardGap, yPos, cardWidth, cardHeight, {
+    // Gelinin Ailesi
+    drawOrnateParentCard(ctx, cardStartX + cardWidth + cardGap, yPos, cardWidth, cardHeight, {
       emoji: '👰',
       title: 'GELİNİN AİLESİ',
       father: weddingConfig.parents.bride.father,
@@ -216,113 +226,92 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
 
     yPos += cardHeight + 45;
 
-    // === GOLD DIVIDER ===
-    drawGoldDivider(ctx, W, yPos);
+    // === ORNATE GOLD DIVIDER ===
+    drawOrnateDivider(ctx, W / 2, yPos);
     yPos += 40;
 
     // === DATE & VENUE SECTION ===
-    // Date & Time
+    // Date Header
     ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#6B5B4E';
+    ctx.fillStyle = '#7A5B2B';
     ctx.textAlign = 'center';
     ctx.fillText('T A R İ H   &   S A A T', W / 2, yPos);
-    yPos += 30;
+    yPos += 28;
 
-    ctx.font = '600 24px "Cormorant Garamond", Georgia, serif';
+    ctx.font = '600 25px "Cormorant Garamond", Georgia, serif';
     ctx.fillStyle = '#1A120C';
     ctx.fillText(`${weddingConfig.displayDate}  •  ${weddingConfig.displayTime}`, W / 2, yPos);
-    yPos += 50;
+    yPos += 48;
 
-    // Venue
+    // Venue Header
     ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#6B5B4E';
+    ctx.fillStyle = '#7A5B2B';
     ctx.fillText('M E K A N', W / 2, yPos);
-    yPos += 30;
+    yPos += 28;
 
-    ctx.font = '600 24px "Cormorant Garamond", Georgia, serif';
+    ctx.font = '600 25px "Cormorant Garamond", Georgia, serif';
     ctx.fillStyle = '#1A120C';
     ctx.fillText(weddingConfig.venue.name, W / 2, yPos);
-    yPos += 30;
+    yPos += 28;
 
-    ctx.font = '400 17px "Cormorant Garamond", Georgia, serif';
+    ctx.font = '400 18px "Cormorant Garamond", Georgia, serif';
     ctx.fillStyle = '#3D2B1F';
-    const addrLines = wrapText(ctx, weddingConfig.venue.address, W - 240);
+    const addrLines = wrapText(ctx, weddingConfig.venue.address, W - 260);
     addrLines.forEach((line) => {
       ctx.fillText(line, W / 2, yPos);
       yPos += 24;
     });
 
-    yPos += 30;
+    yPos += 25;
 
-    // === GOLD DIVIDER ===
-    drawGoldDivider(ctx, W, yPos);
+    // === ORNATE GOLD DIVIDER ===
+    drawOrnateDivider(ctx, W / 2, yPos);
     yPos += 40;
 
-    // === PROGRAM / SCHEDULE ===
+    // === QR CODE PASSEPARTOUT SECTION ===
     ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#6B5B4E';
-    ctx.fillText('P R O G R A M   A K I Ş I', W / 2, yPos);
-    yPos += 30;
-
-    const scheduleBoxW = 500;
-    const scheduleBoxX = (W - scheduleBoxW) / 2;
-
-    weddingConfig.schedule.forEach((item) => {
-      // Schedule item background
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      roundRect(ctx, scheduleBoxX, yPos - 6, scheduleBoxW, 40, 10);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(201, 169, 110, 0.2)';
-      ctx.lineWidth = 1;
-      roundRect(ctx, scheduleBoxX, yPos - 6, scheduleBoxW, 40, 10);
-      ctx.stroke();
-
-      // Time
-      ctx.font = '600 16px "Plus Jakarta Sans", monospace';
-      ctx.fillStyle = '#B8984E';
-      ctx.textAlign = 'left';
-      ctx.fillText(item.time, scheduleBoxX + 20, yPos + 18);
-
-      // Title
-      ctx.font = '500 16px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = '#4A3B2E';
-      ctx.textAlign = 'right';
-      ctx.fillText(item.title, scheduleBoxX + scheduleBoxW - 20, yPos + 18);
-
-      yPos += 50;
-    });
-
-    yPos += 20;
-
-    // === GOLD DIVIDER ===
-    drawGoldDivider(ctx, W, yPos);
-    yPos += 40;
-
-    // === QR CODE SECTION ===
-    ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#6B5B4E';
+    ctx.fillStyle = '#7A5B2B';
     ctx.textAlign = 'center';
     ctx.fillText('D İ J İ T A L   D A V E T İ Y E', W / 2, yPos);
-    yPos += 8;
+    yPos += 10;
 
     ctx.font = '400 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#8B7B6B';
-    ctx.fillText('QR kodu okutarak davetiyeye ulaşabilirsiniz', W / 2, yPos + 18);
-    yPos += 40;
+    ctx.fillStyle = '#6B5B4E';
+    ctx.fillText('QR kodu okutarak davetiyeye ulaşabilirsiniz', W / 2, yPos + 14);
+    yPos += 35;
 
-    // QR Code background box
-    const qrSize = 180;
-    const qrBoxPadding = 24;
+    // QR Code Frame & Box
+    const qrSize = 170;
+    const qrBoxPadding = 20;
     const qrBoxSize = qrSize + qrBoxPadding * 2;
     const qrBoxX = (W - qrBoxSize) / 2;
 
+    // Luxury QR Box Shadow & Frame
     ctx.fillStyle = '#FFFFFF';
     roundRect(ctx, qrBoxX, yPos, qrBoxSize, qrBoxSize, 16);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.35)';
+    ctx.strokeStyle = '#B88E40';
     ctx.lineWidth = 1.5;
     roundRect(ctx, qrBoxX, yPos, qrBoxSize, qrBoxSize, 16);
     ctx.stroke();
+
+    // Inner Accent Corner Markers on QR Box
+    const qM = 8;
+    const qL = 12;
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 1;
+    // Top-left
+    drawLine(ctx, qrBoxX + qM, yPos + qM, qrBoxX + qM + qL, yPos + qM);
+    drawLine(ctx, qrBoxX + qM, yPos + qM, qrBoxX + qM, yPos + qM + qL);
+    // Top-right
+    drawLine(ctx, qrBoxX + qrBoxSize - qM, yPos + qM, qrBoxX + qrBoxSize - qM - qL, yPos + qM);
+    drawLine(ctx, qrBoxX + qrBoxSize - qM, yPos + qM, qrBoxX + qrBoxSize - qM, yPos + qM + qL);
+    // Bottom-left
+    drawLine(ctx, qrBoxX + qM, yPos + qrBoxSize - qM, qrBoxX + qM + qL, yPos + qrBoxSize - qM);
+    drawLine(ctx, qrBoxX + qM, yPos + qrBoxSize - qM, qrBoxX + qM, yPos + qrBoxSize - qM - qL);
+    // Bottom-right
+    drawLine(ctx, qrBoxX + qrBoxSize - qM, yPos + qrBoxSize - qM, qrBoxX + qrBoxSize - qM - qL, yPos + qrBoxSize - qM);
+    drawLine(ctx, qrBoxX + qrBoxSize - qM, yPos + qrBoxSize - qM, qrBoxX + qrBoxSize - qM, yPos + qrBoxSize - qM - qL);
 
     // Draw QR code image
     const qrDataUrl = await getQrDataUrl();
@@ -338,27 +327,27 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
       });
     }
 
-    yPos += qrBoxSize + 25;
+    yPos += qrBoxSize + 20;
 
     // URL text under QR
-    ctx.font = '400 12px "Plus Jakarta Sans", monospace';
-    ctx.fillStyle = '#8B7B6B';
+    ctx.font = '500 12px "Plus Jakarta Sans", monospace';
+    ctx.fillStyle = '#8B6F47';
     ctx.textAlign = 'center';
     const displayUrl = siteUrl || 'dijital-davetiye.vercel.app';
     ctx.fillText(displayUrl, W / 2, yPos);
 
-    yPos += 40;
+    yPos += 38;
 
-    // === FOOTER NAMES ===
-    ctx.font = '400 40px "Great Vibes", cursive';
+    // === FOOTER EMBLEM & NAMES ===
+    ctx.font = '400 38px "Great Vibes", cursive';
     ctx.fillStyle = '#1A120C';
     ctx.textAlign = 'center';
     ctx.fillText(`${weddingConfig.groomName}  ❤  ${weddingConfig.brideName}`, W / 2, yPos);
 
-    yPos += 30;
+    yPos += 28;
 
-    ctx.font = '700 11px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = '#3D2B1F';
+    ctx.font = '600 11px "Plus Jakarta Sans", sans-serif';
+    ctx.fillStyle = '#6B5539';
     ctx.fillText(`${weddingConfig.displayDate}  •  ${weddingConfig.venue.city}`, W / 2, yPos);
 
     return canvas.toDataURL('image/png', 1.0);
@@ -399,7 +388,7 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
             Düğün Davetiyesi
           </h3>
           <p className="text-xs text-warm-400 mt-1 mb-4">
-            QR kodlu düğün davetiyenizi oluşturun ve anı olarak indirin.
+            QR kodlu özel tasarım düğün davetiyenizi oluşturun ve anı olarak indirin.
           </p>
 
           {/* Preview Area */}
@@ -431,7 +420,7 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
           <button
             onClick={handleDownload}
             disabled={!previewDataUrl || isGenerating}
-            className="w-full py-3.5 rounded-xl bg-gold-gradient text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-gold-glow hover:scale-105 transition-all disabled:opacity-50 disabled:hover:scale-100"
+            className="w-full py-3.5 rounded-xl bg-gold-gradient text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-gold-glow hover:scale-105 transition-all disabled:opacity-50 disabled:hover:scale-100 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             Davetiyeyi İndir (PNG)
@@ -455,7 +444,7 @@ export const QRCodeModal: React.FC<QRCodeModalProps> = ({ isOpen, onClose }) => 
 };
 
 // ═══════════════════════════════════════════
-// CANVAS HELPER FUNCTIONS
+// CANVAS HELPER & MOTIF DRAWING FUNCTIONS
 // ═══════════════════════════════════════════
 
 function roundRect(
@@ -492,20 +481,140 @@ function drawLine(
   ctx.stroke();
 }
 
-function drawGoldDivider(ctx: CanvasRenderingContext2D, canvasW: number, y: number) {
-  const grad = ctx.createLinearGradient(canvasW * 0.2, y, canvasW * 0.8, y);
-  grad.addColorStop(0, 'transparent');
-  grad.addColorStop(0.5, 'rgba(201, 169, 110, 0.5)');
-  grad.addColorStop(1, 'transparent');
-  ctx.strokeStyle = grad;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(canvasW * 0.15, y);
-  ctx.lineTo(canvasW * 0.85, y);
-  ctx.stroke();
+// Ornate Corner Motifs (Vintage / Filigree Crafts)
+function drawOrnateCorners(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  x2: number,
+  y1: number,
+  y2: number
+) {
+  const cornerSize = 40;
+  ctx.strokeStyle = '#B88E40';
+  ctx.lineWidth = 1.5;
+
+  const drawCorner = (cx: number, cy: number, flipX: number, flipY: number) => {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(flipX, flipY);
+
+    // L-shaped Corner Bar
+    ctx.beginPath();
+    ctx.moveTo(0, cornerSize);
+    ctx.lineTo(0, 0);
+    ctx.lineTo(cornerSize, 0);
+    ctx.stroke();
+
+    // Inner Arc
+    ctx.beginPath();
+    ctx.arc(0, 0, 16, 0, Math.PI / 2);
+    ctx.stroke();
+
+    // Corner Diamond Accent
+    ctx.fillStyle = '#D4AF37';
+    ctx.beginPath();
+    ctx.arc(10, 10, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Outer Decorative Floral Dots
+    ctx.fillStyle = 'rgba(212, 160, 160, 0.6)';
+    ctx.font = '16px serif';
+    ctx.fillText('✿', 22, -4);
+
+    ctx.restore();
+  };
+
+  // Top-Left
+  drawCorner(x1, y1, 1, 1);
+  // Top-Right
+  drawCorner(x2, y1, -1, 1);
+  // Bottom-Left
+  drawCorner(x1, y2, 1, -1);
+  // Bottom-Right
+  drawCorner(x2, y2, -1, -1);
 }
 
-function drawParentCard(
+// Header Floral / Crown Decoration
+function drawMotifHeaderDecoration(ctx: CanvasRenderingContext2D, cx: number, cy: number) {
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  // Center Floral Symbol
+  ctx.font = '22px serif';
+  ctx.fillStyle = '#C88A8A';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('✿', 0, 0);
+
+  // Left & Right Flourish Lines with Diamonds
+  ctx.strokeStyle = '#B88E40';
+  ctx.lineWidth = 1;
+
+  // Left
+  drawLine(ctx, -20, 0, -80, 0);
+  ctx.fillStyle = '#D4AF37';
+  ctx.beginPath();
+  ctx.arc(-80, 0, 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Right
+  drawLine(ctx, 20, 0, 80, 0);
+  ctx.beginPath();
+  ctx.arc(80, 0, 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// Ornate Section Divider with Center Diamond Accent
+function drawOrnateDivider(ctx: CanvasRenderingContext2D, cx: number, y: number) {
+  const width = 380;
+  const x1 = cx - width / 2;
+  const x2 = cx + width / 2;
+
+  const gradLeft = ctx.createLinearGradient(x1, y, cx - 20, y);
+  gradLeft.addColorStop(0, 'transparent');
+  gradLeft.addColorStop(1, '#B88E40');
+
+  const gradRight = ctx.createLinearGradient(cx + 20, y, x2, y);
+  gradRight.addColorStop(0, '#B88E40');
+  gradRight.addColorStop(1, 'transparent');
+
+  // Left Line
+  ctx.strokeStyle = gradLeft;
+  ctx.lineWidth = 1;
+  drawLine(ctx, x1, y, cx - 20, y);
+
+  // Right Line
+  ctx.strokeStyle = gradRight;
+  drawLine(ctx, cx + 20, y, x2, y);
+
+  // Center Diamond & Flourish Symbol
+  ctx.save();
+  ctx.translate(cx, y);
+
+  // Diamond
+  ctx.fillStyle = '#B88E40';
+  ctx.beginPath();
+  ctx.moveTo(0, -5);
+  ctx.lineTo(5, 0);
+  ctx.lineTo(0, 5);
+  ctx.lineTo(-5, 0);
+  ctx.closePath();
+  ctx.fill();
+
+  // Side Small Dots
+  ctx.fillStyle = '#D4AF37';
+  ctx.beginPath();
+  ctx.arc(-11, 0, 2, 0, Math.PI * 2);
+  ctx.arc(11, 0, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// Ornate Parent Card Box
+function drawOrnateParentCard(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
@@ -513,47 +622,53 @@ function drawParentCard(
   h: number,
   info: { emoji: string; title: string; father: string; mother: string }
 ) {
-  // Card background
+  // Card Background
   ctx.fillStyle = '#FFFFFF';
-  roundRect(ctx, x, y, w, h, 16);
+  roundRect(ctx, x, y, w, h, 14);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(201, 169, 110, 0.35)';
+
+  // Double Border for Card
+  ctx.strokeStyle = 'rgba(184, 142, 64, 0.4)';
   ctx.lineWidth = 1.5;
-  roundRect(ctx, x, y, w, h, 16);
+  roundRect(ctx, x, y, w, h, 14);
   ctx.stroke();
 
-  // Floral decoration
-  ctx.font = '14px serif';
-  ctx.fillStyle = 'rgba(212, 160, 160, 0.5)';
+  ctx.strokeStyle = 'rgba(184, 142, 64, 0.15)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, x + 4, y + 4, w - 8, h - 8, 10);
+  ctx.stroke();
+
+  // Top Corner Floral Ornaments
+  ctx.font = '13px serif';
+  ctx.fillStyle = 'rgba(200, 138, 138, 0.6)';
+  ctx.textAlign = 'left';
+  ctx.fillText('✿', x + 10, y + 20);
   ctx.textAlign = 'right';
-  ctx.fillText('✿', x + w - 14, y + 22);
+  ctx.fillText('✿', x + w - 10, y + 20);
 
   const cx = x + w / 2;
-  let ty = y + 32;
+  let ty = y + 30;
 
   // Emoji
-  ctx.font = '32px serif';
+  ctx.font = '30px serif';
   ctx.textAlign = 'center';
   ctx.fillText(info.emoji, cx, ty);
-  ty += 32;
+  ty += 30;
 
   // Title
   ctx.font = '700 12px "Plus Jakarta Sans", sans-serif';
-  ctx.fillStyle = '#6B5539';
+  ctx.fillStyle = '#7A5B2B';
   ctx.fillText(info.title, cx, ty);
-  ty += 20;
+  ty += 18;
 
-  // Divider line
-  const lineGrad = ctx.createLinearGradient(cx - 30, ty, cx + 30, ty);
+  // Small Line Accent
+  const lineGrad = ctx.createLinearGradient(cx - 35, ty, cx + 35, ty);
   lineGrad.addColorStop(0, 'transparent');
   lineGrad.addColorStop(0.5, '#B88E40');
   lineGrad.addColorStop(1, 'transparent');
   ctx.strokeStyle = lineGrad;
   ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(cx - 30, ty);
-  ctx.lineTo(cx + 30, ty);
-  ctx.stroke();
+  drawLine(ctx, cx - 35, ty, cx + 35, ty);
   ty += 22;
 
   // Father
@@ -563,7 +678,7 @@ function drawParentCard(
   ty += 22;
 
   // "&"
-  ctx.font = '700 12px "Plus Jakarta Sans", sans-serif';
+  ctx.font = '600 12px "Plus Jakarta Sans", sans-serif';
   ctx.fillStyle = '#8B7B6B';
   ctx.fillText('&', cx, ty);
   ty += 22;
